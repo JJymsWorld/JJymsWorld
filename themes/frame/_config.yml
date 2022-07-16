@@ -13,6 +13,7 @@ menu:
   Home: /
   Archive: /archives/
   Gallery: /categories/gallery/
+  Tags: /tag/
 
 # stylesheets loaded in the <head>
 stylesheets:
@@ -36,8 +37,8 @@ profile:
   links:
     Home: /
     Blogs: /archives/
-    Categories: /categories/
-    Tags: /tags/
+    Gallery: /categories/gallery/
+    Tags: /tag/
 
 # footer
 footer:
@@ -57,7 +58,7 @@ color_mode: default
 
 # mathjax setting
 # note: need to install the hexo plugin for math: https://github.com/hexojs/hexo-math
-mathjax_enable: false
+mathjax_enable: true
 
 # comments: support disqus and valine
 valine: # valine setup guide: https://valine.js.org/quickstart.html
@@ -70,6 +71,6 @@ valine: # valine setup guide: https://valine.js.org/quickstart.html
   meta: ['nick', 'mail']
 
 disqus: # disqus setup guide: https://help.disqus.com/en/articles/1717056-publisher-quick-start-guide
-  enable: false
-  disqus_url: # your diqsuq url or shortname
+  enable: true
+  disqus_url: 'https://versatile1.disqus.com/embed.js'# your diqsuq url or shortname
   language: 'en'
