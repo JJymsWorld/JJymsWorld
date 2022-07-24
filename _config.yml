@@ -104,7 +104,8 @@ theme: frame
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/JJymsWorld/jjymsworld.git
+  # repo: https://github.com/JJymsWorld/jjymsworld.git
+  repo: git@github.com:JJymsWorld/jjymsworld.git
   branch: gh-pages
   token: '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'
   email: qq171895821@163.com
