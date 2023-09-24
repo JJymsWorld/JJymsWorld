@@ -3,11 +3,11 @@
 language: en
 
 # header
-site_brand_name: Revves_J
+site_brand_name: YiMing
 
 logo_image:
   enable: true
-  image_path: /logo.png # path to your logo image
+  image_path: /logo2.png # path to your logo image
 
 menu:
   Home: /
@@ -21,7 +21,7 @@ stylesheets:
 
 # scripts loaded in the end of the body
 scripts:
-- /js/frame.js
+- /js/menu.js
 
 # favicon
 favicon: /favicon.ico
@@ -30,9 +30,9 @@ date_format: MMM D, YYYY
 
 # profile
 profile:
-  title: Reeves J's World! 
-  body: Run more run fast.
-  image: /profile_cover.png
+  title: Welcome to YiMing's blog! 
+  body: Do more than talk.
+  image: /profile2.jpg
 
   links:
     Home: /
@@ -74,3 +74,13 @@ disqus: # disqus setup guide: https://help.disqus.com/en/articles/1717056-publis
   enable: true
   disqus_url: 'https://versatile1.disqus.com/embed.js'# your diqsuq url or shortname
   language: 'en'
+
+
+# local search
+local_search:
+  enable: true
+  place_holder: Search Anything
+  trigger: auto # auto: trigger search whenever input changes
+  top_n_per_article: 1 # show top n results per article, show all results by setting to -1
+  unescape: false # unescape html strings to the readable one
+  preload: false # reload the search data when the page loads, this will accelerate the search process
