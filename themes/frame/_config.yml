@@ -30,8 +30,8 @@ date_format: MMM D, YYYY
 
 # profile
 profile:
-  title: Welcome to YiMing's blog! 
-  body: Do more than talk.
+  title: Welcome to my blog!
+  body: Sharp tools make good work.
   image: /profile2.jpg
 
   links:
@@ -58,7 +58,9 @@ color_mode: default
 
 # mathjax setting
 # note: need to install the hexo plugin for math: https://github.com/hexojs/hexo-math
-mathjax_enable: true
+mathjax_enable: 
+  enable: true
+  css: 'https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css' 
 
 # comments: support disqus and valine
 valine: # valine setup guide: https://valine.js.org/quickstart.html

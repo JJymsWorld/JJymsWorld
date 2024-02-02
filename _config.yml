@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Revves_J
+title: YiMing
 subtitle: ''
 description: ''
 keywords:
@@ -108,7 +108,8 @@ deploy:
   # repo: https://github.com/JJymsWorld/jjymsworld.git
   repo: git@github.com:JJymsWorld/jjymsworld.git
   branch: gh-pages
-  token: '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'
+  # token: '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'
+  token: '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'
   email: qq171895821@163.com
 
 # Search
