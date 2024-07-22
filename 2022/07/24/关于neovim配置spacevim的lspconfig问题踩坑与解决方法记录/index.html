@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>关于neovim配置spacevim的lspconfig问题踩坑与解决方法记录 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/neovim/">
+                            neovim
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/spacevim/">
+                            spacevim
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/vim/">
+                            vim
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                关于neovim配置spacevim的lspconfig问题踩坑与解决方法记录
+            
+            
+        </div>
+        <span class="post-date">
+            7月 24, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>在archlinux下做开发已经很长时间了,对于小型项目的开发一直使用的是vim和gvim. 偶然尝试了一下neovim, 发现其在UI性能方面相较于gvim更加强大, 界面滚动也更加丝滑, 随即产生了从Vim切换到neovim的想法. 由于我直接使用的Spacevim, 在切换到neovim时产生了一些问题, 主要是lspconfig的报错问题. 这里记录一下我搜索到的资料与解决方法, 以便后面再出现此类错误, 更容易修补.</p>
+<p>首先贴上我在使用gvim时的Spacevim的配置文件代码:</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#=============================================================================</span></span><br><span class="line"><span class="comment"># basic.toml --- basic configuration example for SpaceVim</span></span><br><span class="line"><span class="comment"># Copyright (c) 2016-2022 Wang Shidong &amp; Contributors</span></span><br><span class="line"><span class="comment"># Author: Wang Shidong &lt; wsdjeg at 163.com &gt;</span></span><br><span class="line"><span class="comment"># URL: https://spacevim.org</span></span><br><span class="line"><span class="comment"># License: GPLv3</span></span><br><span class="line"><span class="comment">#=============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All SpaceVim option below [option] section</span></span><br><span class="line"><span class="section">[options]</span></span><br><span class="line">    <span class="comment"># set spacevim theme. by default colorscheme layer is not loaded,</span></span><br><span class="line">    <span class="comment"># if you want to use more colorscheme, please load the colorscheme</span></span><br><span class="line">    <span class="comment"># layer</span></span><br><span class="line">    <span class="attr">colorscheme</span> = <span class="string">&quot;onedark&quot;</span></span><br><span class="line">    <span class="attr">colorscheme_bg</span> = <span class="string">&quot;dark&quot;</span></span><br><span class="line">    <span class="comment"># Disable guicolors in basic mode, many terminal do not support 24bit</span></span><br><span class="line">    <span class="comment"># true colors</span></span><br><span class="line">    <span class="attr">enable_guicolors</span> = <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Disable statusline separator, if you want to use other value, please</span></span><br><span class="line">    <span class="comment"># install nerd fonts</span></span><br><span class="line">    <span class="attr">statusline_separator</span> = <span class="string">&quot;nil&quot;</span></span><br><span class="line">    <span class="attr">statusline_iseparator</span> = <span class="string">&quot;bar&quot;</span></span><br><span class="line">    <span class="attr">buffer_index_type</span> = <span class="number">4</span></span><br><span class="line">    <span class="attr">windows_index_type</span> = <span class="number">3</span></span><br><span class="line">    <span class="attr">enable_tabline_filetype_icon</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">enable_statusline_mode</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">statusline_unicode</span> = <span class="literal">false</span></span><br><span class="line">    <span class="comment"># Enable vim compatible mode, avoid changing origin vim key bindings</span></span><br><span class="line">    <span class="attr">vimcompatible</span> = <span class="literal">true</span></span><br><span class="line">    <span class="attr">disbaled_plugins</span> = [<span class="string">&quot;delimitMate&quot;</span>]</span><br><span class="line">    <span class="attr">expand_tab</span> = <span class="literal">true</span> </span><br><span class="line">    <span class="attr">relativenumber</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">autocomplete_method</span> = <span class="string">&quot;coc&quot;</span></span><br><span class="line">    <span class="attr">bootstrap_before</span> = <span class="string">&quot;myspacevim#before&quot;</span></span><br><span class="line">    <span class="attr">default_indent</span> = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line">  <span class="attr">repo</span> = <span class="string">&quot;jiangmiao/auto-pairs&quot;</span></span><br><span class="line">  <span class="attr">merged</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># [[custom_plugins]]</span></span><br><span class="line">  <span class="comment"># repo = &quot;mhartington/oceanic-next&quot;</span></span><br><span class="line">  <span class="comment"># merged = 0</span></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line"><span class="attr">repo</span> = <span class="string">&quot;ryanoasis/vim-devicons&quot;</span></span><br><span class="line"><span class="attr">merged</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># [[custom_plugins]]</span></span><br><span class="line"><span class="comment"># repo = &quot;mattn/vim-treesitter&quot;</span></span><br><span class="line"><span class="comment"># merged = 0</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;colorscheme&quot;</span></span><br><span class="line"><span class="comment"># random_theme = true</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;sudo&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;treesitter&quot;</span></span><br><span class="line"><span class="comment"># Enable autocomplete layer</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&#x27;autocomplete&#x27;</span></span><br><span class="line"><span class="attr">auto_completion_return_key_behavior</span> = <span class="string">&quot;complete&quot;</span></span><br><span class="line"><span class="attr">auto_completion_tab_key_behavior</span> = <span class="string">&quot;cycle&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&#x27;shell&#x27;</span></span><br><span class="line"><span class="attr">default_position</span> = <span class="string">&#x27;top&#x27;</span></span><br><span class="line"><span class="attr">default_height</span> = <span class="number">30</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#javascript&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#typescript&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#python&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#c&quot;</span></span><br><span class="line">  <span class="attr">enable_clang_syntax_highlight</span> = <span class="literal">true</span></span><br><span class="line">  <span class="section">[layer.clang_std]</span></span><br><span class="line">    <span class="attr">cpp</span> = <span class="string">&quot;c11&quot;</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#go&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lsp&quot;</span></span><br><span class="line">  <span class="attr">enable_clients</span> = [</span><br><span class="line">    <span class="string">&#x27;clangd&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;pyls&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;gopls&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;typescript-language-server&#x27;</span></span><br><span class="line">  ]</span><br><span class="line">  <span class="attr">filetypes</span> = [</span><br><span class="line">    <span class="string">&quot;c&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cpp&quot;</span>,</span><br><span class="line">    <span class="string">&quot;python&quot;</span>,</span><br><span class="line">    <span class="string">&quot;go&quot;</span>,</span><br><span class="line">    <span class="string">&quot;javascript&quot;</span></span><br><span class="line">  ]</span><br><span class="line">  <span class="section">[layers.override_cmd]</span></span><br><span class="line">    <span class="attr">c</span> = [<span class="string">&quot;clangd&quot;</span>]</span><br><span class="line">    <span class="attr">cpp</span> = [<span class="string">&quot;clangd&quot;</span>]</span><br><span class="line">    <span class="attr">python</span> = [<span class="string">&quot;pyls&quot;</span>]</span><br><span class="line">    <span class="attr">go</span> = [<span class="string">&quot;gopls&quot;</span>]</span><br><span class="line">    <span class="attr">javascript</span> = [<span class="string">&quot;typescript-language-server&quot;</span>, <span class="string">&quot;--stdio&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;format&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>下面是我修改完成使用neovim的配置文件代码:</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#=============================================================================</span></span><br><span class="line"><span class="comment"># basic.toml --- basic configuration example for SpaceVim</span></span><br><span class="line"><span class="comment"># Copyright (c) 2016-2022 Wang Shidong &amp; Contributors</span></span><br><span class="line"><span class="comment"># Author: Wang Shidong &lt; wsdjeg at 163.com &gt;</span></span><br><span class="line"><span class="comment"># URL: https://spacevim.org</span></span><br><span class="line"><span class="comment"># License: GPLv3</span></span><br><span class="line"><span class="comment">#=============================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># All SpaceVim option below [option] section</span></span><br><span class="line"><span class="section">[options]</span></span><br><span class="line">    <span class="comment"># set spacevim theme. by default colorscheme layer is not loaded,</span></span><br><span class="line">    <span class="comment"># if you want to use more colorscheme, please load the colorscheme</span></span><br><span class="line">    <span class="comment"># layer</span></span><br><span class="line">    <span class="attr">colorscheme</span> = <span class="string">&quot;onedark&quot;</span></span><br><span class="line">    <span class="attr">colorscheme_bg</span> = <span class="string">&quot;dark&quot;</span></span><br><span class="line">    <span class="comment"># Disable guicolors in basic mode, many terminal do not support 24bit</span></span><br><span class="line">    <span class="comment"># true colors</span></span><br><span class="line">    <span class="attr">enable_guicolors</span> = <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Disable statusline separator, if you want to use other value, please</span></span><br><span class="line">    <span class="comment"># install nerd fonts</span></span><br><span class="line">    <span class="attr">statusline_separator</span> = <span class="string">&quot;nil&quot;</span></span><br><span class="line">    <span class="attr">statusline_iseparator</span> = <span class="string">&quot;bar&quot;</span></span><br><span class="line">    <span class="attr">buffer_index_type</span> = <span class="number">4</span></span><br><span class="line">    <span class="attr">windows_index_type</span> = <span class="number">3</span></span><br><span class="line">    <span class="attr">enable_tabline_filetype_icon</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">enable_statusline_mode</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">statusline_unicode</span> = <span class="literal">false</span></span><br><span class="line">    <span class="comment"># Enable vim compatible mode, avoid changing origin vim key bindings</span></span><br><span class="line">    <span class="attr">vimcompatible</span> = <span class="literal">true</span></span><br><span class="line">    <span class="attr">disbaled_plugins</span> = [<span class="string">&quot;delimitMate&quot;</span>]</span><br><span class="line">    <span class="attr">expand_tab</span> = <span class="literal">true</span> </span><br><span class="line">    <span class="attr">relativenumber</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">autocomplete_method</span> = <span class="string">&quot;nvim-cmp&quot;</span></span><br><span class="line">    <span class="attr">bootstrap_before</span> = <span class="string">&quot;myspacevim#before&quot;</span></span><br><span class="line">    <span class="attr">default_indent</span> = <span class="number">4</span></span><br><span class="line">    <span class="attr">snippet_engine</span> = <span class="string">&quot;ultisnips&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line">  <span class="attr">repo</span> = <span class="string">&#x27;https://github.com/hrsh7th/nvim-cmp.git&#x27;</span></span><br><span class="line">  <span class="attr">merged</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line">  <span class="attr">repo</span> = <span class="string">&quot;jiangmiao/auto-pairs&quot;</span></span><br><span class="line">  <span class="attr">merged</span> = <span class="literal">false</span></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line">    <span class="attr">repo</span> = <span class="string">&quot;chrisbra/csv.vim&quot;</span></span><br><span class="line">    <span class="attr">merged</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># [[custom_plugins]]</span></span><br><span class="line">  <span class="comment"># repo = &quot;mhartington/oceanic-next&quot;</span></span><br><span class="line">  <span class="comment"># merged = 0</span></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line"><span class="attr">repo</span> = <span class="string">&quot;ryanoasis/vim-devicons&quot;</span></span><br><span class="line"><span class="attr">merged</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># [[custom_plugins]]</span></span><br><span class="line"><span class="comment"># repo = &quot;mattn/vim-treesitter&quot;</span></span><br><span class="line"><span class="comment"># merged = 0</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;colorscheme&quot;</span></span><br><span class="line"><span class="comment"># random_theme = true</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;sudo&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;treesitter&quot;</span></span><br><span class="line"><span class="comment"># Enable autocomplete layer</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&#x27;autocomplete&#x27;</span></span><br><span class="line"><span class="attr">auto_completion_return_key_behavior</span> = <span class="string">&quot;complete&quot;</span></span><br><span class="line"><span class="attr">auto_completion_tab_key_behavior</span> = <span class="string">&quot;cycle&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&#x27;shell&#x27;</span></span><br><span class="line"><span class="attr">default_position</span> = <span class="string">&#x27;top&#x27;</span></span><br><span class="line"><span class="attr">default_height</span> = <span class="number">30</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#javascript&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#typescript&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#python&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#c&quot;</span></span><br><span class="line">  <span class="attr">enable_clang_syntax_highlight</span> = <span class="literal">true</span></span><br><span class="line">  <span class="section">[layer.clang_std]</span></span><br><span class="line">    <span class="attr">cpp</span> = <span class="string">&quot;c11&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lang#go&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;lsp&quot;</span></span><br><span class="line">  <span class="attr">enable_clients</span> = [</span><br><span class="line">    <span class="string">&#x27;clangd&#x27;</span>,</span><br><span class="line">    <span class="comment"># &#x27;pyls&#x27;,</span></span><br><span class="line">    <span class="string">&#x27;pylsp&#x27;</span></span><br><span class="line">    <span class="string">&#x27;gopls&#x27;</span>,</span><br><span class="line">    <span class="comment"># &#x27;typescript-language-server&#x27;</span></span><br><span class="line">    <span class="string">&#x27;tsserver&#x27;</span></span><br><span class="line">  ]</span><br><span class="line">  <span class="attr">filetypes</span> = [</span><br><span class="line">    <span class="string">&quot;c&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cpp&quot;</span>,</span><br><span class="line">    <span class="string">&quot;python&quot;</span>,</span><br><span class="line">    <span class="string">&quot;go&quot;</span>,</span><br><span class="line">    <span class="string">&quot;javascript&quot;</span>,</span><br><span class="line">    <span class="string">&quot;typescript&quot;</span></span><br><span class="line">  ]</span><br><span class="line">  <span class="section">[layers.override_client_cmds]</span></span><br><span class="line">    <span class="comment"># c = [&quot;clangd&quot;]</span></span><br><span class="line">    <span class="attr">clangd</span> = [<span class="string">&quot;clangd&quot;</span>]</span><br><span class="line">    <span class="attr">pylsp</span> = [<span class="string">&quot;pylsp&quot;</span>]</span><br><span class="line">    <span class="attr">gopls</span> = [<span class="string">&quot;gopls&quot;</span>, <span class="string">&quot;serve&quot;</span>]</span><br><span class="line">    <span class="attr">tsserver</span> = [<span class="string">&quot;typescript-language-server&quot;</span>, <span class="string">&quot;--stdio&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;format&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>下面说明一下遇到的问题</p>
+<p>首先是lspconfig问题</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[dein] Error occurred while executing hook: nvim-lspconfig</span><br><span class="line"></span><br><span class="line">[dein] Vim(lua):E5108: Error executing lua ...b/.SpaceVim/bundle/nvim-lspconfig/lua/lspconfig.lua:80: attempt to co</span><br><span class="line"></span><br><span class="line">ncatenate local &#x27;k&#x27; (a boolean value)</span><br><span class="line"></span><br><span class="line">[dein] stack traceback:</span><br><span class="line"></span><br><span class="line">[dein] ^I...b/.SpaceVim/bundle/nvim-lspconfig/lua/lspconfig.lua:80: in function &#x27;__index&#x27;</span><br><span class="line"></span><br><span class="line">[dein] ^I[string &quot;:lua&quot;]:49: in main chunk</span><br></pre></td></tr></table></figure>
+
+<p>每次使用neovim都会报这个错误, 目前最新版本为0.7.2-3, 有的人切换到0.7.0-3即可正常运行, 然而在我这里却没有用, 无论我切换到什么版本都会报这个错误. 查找了很久的解决方案, 最终在spacevim 的google groups上面找到了一个有效的解决方案. 原链接见<a target="_blank" rel="noopener" href="https://groups.google.com/g/spacevim/c/E5C9zXU_Xk8">此处</a></p>
+<p>翻译过来的解决方法就是</p>
+<p>在options里面设置自动不全的引擎为<strong>nvim-cmp</strong>, 由于Spacevim并没有内置nvim-cmp故需要我们手动添加配置让spacevim安装这个插件, 即下面的[[custom_plugins]]处. 这里修改完之后还需要修改lsp layers里面的<code>layers.override_cmd</code> 为<code>layers.override_client_cmds</code>并且其中的内容也需要修改,原本的是filetype对应client, 而修改后应为server_name对应client, 看不懂的可以仔细对比文章最上面的两个配置文件的区别.</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[options]</span> </span><br><span class="line"> <span class="comment">#    disabled_plugins = [&quot;nvim-lspconfig&quot; ] # do not do that! it is not needed anymore.</span></span><br><span class="line">    <span class="attr">autocomplete_method</span> = <span class="string">&quot;nvim-cmp&quot;</span></span><br><span class="line"><span class="section">[[custom_plugins]]</span></span><br><span class="line">    <span class="attr">repo</span> = <span class="string">&quot;https://github.com/hrsh7th/nvim-cmp.git&quot;</span></span><br><span class="line">    <span class="attr">merged</span> = <span class="number">0</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">    <span class="attr">name</span> = <span class="string">&quot;lsp&quot;</span></span><br><span class="line">    <span class="attr">enabled_clients</span> = [</span><br><span class="line"><span class="comment">#        &#x27;dartls&#x27;,</span></span><br><span class="line">        <span class="string">&#x27;gopls&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;intelephense&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;rust_analyzer&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;tsserver&#x27;</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="attr">filetypes</span> = [</span><br><span class="line"><span class="comment">#        &quot;dart&quot;,</span></span><br><span class="line">        <span class="string">&quot;php&quot;</span>,</span><br><span class="line">        <span class="string">&quot;rust&quot;</span>,</span><br><span class="line">        <span class="string">&quot;go&quot;</span>,</span><br><span class="line">        <span class="string">&quot;typescript&quot;</span>,</span><br><span class="line">        <span class="string">&quot;javascript&quot;</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="section">[layers.override_client_cmds]</span></span><br><span class="line">      <span class="attr">intelephense</span> = [<span class="string">&quot;intelephense&quot;</span>, <span class="string">&quot;--stdio&quot;</span>]</span><br><span class="line"><span class="comment">#      dartls = [</span></span><br><span class="line"><span class="comment">#          &quot;/opt/flutter/bin/cache/dart-sdk/bin/dart&quot;,</span></span><br><span class="line"><span class="comment">#          &quot;/opt/flutter/bin/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot&quot;,</span></span><br><span class="line"><span class="comment">#          &quot;--lsp&quot;</span></span><br><span class="line"><span class="comment">#      ]</span></span><br><span class="line">      <span class="attr">rust_analyzer</span> = [<span class="string">&quot;rust-analyzer&quot;</span>]</span><br><span class="line">      <span class="attr">gopls</span> = [<span class="string">&quot;gopls&quot;</span>, <span class="string">&quot;serve&quot;</span>]</span><br><span class="line">      <span class="attr">tsserver</span> = [<span class="string">&#x27;typescript-language-server&#x27;</span>, <span class="string">&#x27;--stdio&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># and then per-language layers as usual, for example</span></span><br><span class="line"><span class="section">[[layers]]</span></span><br><span class="line">    <span class="attr">name</span> = <span class="string">&quot;lang#php&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改完成之后, 应该已经不会出现上面所显示的错误了. 但是还会继续遇到问题, 首先就是nvim-cmp的代码提示不完善, 它优先提示的是buffer, 而我们真正需要的是lsp的代码提示, 并且还存在的问题是代码提示中的选项, 我们无法通过方向键或者tab键来进行选择, 并且的并且我们还需要手动设置snippet engine, 否则我们在使用代码补全的时候,仍然会出现错误. 上述的这些问题需要修改nvim-cmp的配置文件, 这里直接放出我的配置文件, 参照着修改即可.</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">lua &lt;&lt;EOF</span><br><span class="line">  <span class="comment">-- Setup nvim-cmp.</span></span><br><span class="line">  <span class="keyword">local</span> cmp = <span class="built_in">require</span><span class="string">&#x27;cmp&#x27;</span></span><br><span class="line"></span><br><span class="line">  cmp.setup(&#123;</span><br><span class="line">    mapping = cmp.mapping.preset.<span class="built_in">insert</span>(&#123; <span class="comment">--这里需要修改</span></span><br><span class="line">      [<span class="string">&#x27;&lt;C-d&gt;&#x27;</span>] = cmp.mapping(cmp.mapping.scroll_docs(<span class="number">-4</span>), &#123; <span class="string">&#x27;i&#x27;</span>, <span class="string">&#x27;c&#x27;</span> &#125;),</span><br><span class="line">      [<span class="string">&#x27;&lt;C-f&gt;&#x27;</span>] = cmp.mapping(cmp.mapping.scroll_docs(<span class="number">4</span>), &#123; <span class="string">&#x27;i&#x27;</span>, <span class="string">&#x27;c&#x27;</span> &#125;),</span><br><span class="line">      [<span class="string">&#x27;&lt;C-Space&gt;&#x27;</span>] = cmp.mapping(cmp.mapping.complete(), &#123; <span class="string">&#x27;i&#x27;</span>, <span class="string">&#x27;c&#x27;</span> &#125;),</span><br><span class="line">      [<span class="string">&#x27;&lt;C-y&gt;&#x27;</span>] = cmp.<span class="built_in">config</span>.disable, <span class="comment">-- Specify `cmp.config.disable` if you want to remove the default `&lt;C-y&gt;` mapping.</span></span><br><span class="line">      [<span class="string">&#x27;&lt;C-e&gt;&#x27;</span>] = cmp.mapping(&#123;</span><br><span class="line">        i = cmp.mapping.abort(),</span><br><span class="line">        c = cmp.mapping.<span class="built_in">close</span>(),</span><br><span class="line">      &#125;),</span><br><span class="line">      [<span class="string">&#x27;&lt;CR&gt;&#x27;</span>] = cmp.mapping.confirm(&#123; <span class="built_in">select</span> = <span class="literal">true</span> &#125;), <span class="comment">--这里添加tab选择功能</span></span><br><span class="line">      [<span class="string">&#x27;&lt;Tab&gt;&#x27;</span>] = <span class="function"><span class="keyword">function</span><span class="params">(fallback)</span></span></span><br><span class="line">        <span class="keyword">if</span> cmp.visible() <span class="keyword">then</span></span><br><span class="line">          cmp.select_next_item()</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          fallback()</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span>,</span><br><span class="line">      [<span class="string">&#x27;&lt;S-Tab&gt;&#x27;</span>] = <span class="function"><span class="keyword">function</span><span class="params">(fallback)</span></span></span><br><span class="line">        <span class="keyword">if</span> cmp.visible() <span class="keyword">then</span></span><br><span class="line">          cmp.select_prev_item()</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          fallback()</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span>,</span><br><span class="line">    &#125;), <span class="comment">--到这里结束</span></span><br><span class="line">    formatting = &#123;</span><br><span class="line">      <span class="built_in">format</span> = <span class="built_in">require</span>(<span class="string">&quot;lspkind&quot;</span>).cmp_format(&#123;with_text = <span class="literal">true</span>, menu = (&#123;</span><br><span class="line">          buffer = <span class="string">&quot;[Buffer]&quot;</span>,</span><br><span class="line">        &#125;)&#125;),</span><br><span class="line">    &#125;,</span><br><span class="line">    sources = cmp.<span class="built_in">config</span>.sources(&#123; <span class="comment">--这里修改使代码提示显示为lsp服务的提示,主要是顺序的修改</span></span><br><span class="line"><span class="comment">--      &#123; name = &#x27;path&#x27; &#125;,</span></span><br><span class="line">      &#123; name = <span class="string">&#x27;nvim_lsp&#x27;</span> &#125;</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      &#123; name = <span class="string">&#x27;buffer&#x27;</span> &#125;,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      &#123; name = <span class="string">&#x27;path&#x27;</span> &#125;,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      &#123; name = <span class="string">&#x27;ultisnips&#x27;</span> &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">  snippet = &#123; <span class="comment">--这里是新增的 参照官方文档进行的修改 将UltiSnips设置为默认的snippet engine</span></span><br><span class="line">    expand = <span class="function"><span class="keyword">function</span><span class="params">(args)</span></span></span><br><span class="line">      vim.fn[<span class="string">&quot;UltiSnips#Anon&quot;</span>](args.body)</span><br><span class="line">  <span class="keyword">end</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">-- The nvim-cmp almost supports LSP&#x27;s capabilities so You should advertise it to LSP servers..</span></span><br><span class="line"><span class="keyword">local</span> capabilities = vim.lsp.protocol.make_client_capabilities()</span><br><span class="line">capabilities = <span class="built_in">require</span>(<span class="string">&#x27;cmp_nvim_lsp&#x27;</span>).update_capabilities(capabilities)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- The following example advertise capabilities to `clangd`.</span></span><br><span class="line"><span class="built_in">require</span><span class="string">&#x27;lspconfig&#x27;</span>.clangd.setup &#123;</span><br><span class="line">  capabilities = capabilities,</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<p>参考地址:</p>
+<p><a target="_blank" rel="noopener" href="https://groups.google.com/g/spacevim?pli=1">https://groups.google.com/g/spacevim?pli=1</a></p>
+<p><a target="_blank" rel="noopener" href="https://groups.google.com/g/spacevim/c/Q8LBeNBBm60">https://groups.google.com/g/spacevim/c/Q8LBeNBBm60</a></p>
+<p><a target="_blank" rel="noopener" href="https://groups.google.com/g/spacevim/c/E5C9zXU_Xk8">https://groups.google.com/g/spacevim/c/E5C9zXU_Xk8</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hrsh7th/nvim-cmp/issues/102">https://github.com/hrsh7th/nvim-cmp/issues/102</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources">https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hrsh7th/nvim-cmp#basic-configuration">https://github.com/hrsh7th/nvim-cmp#basic-configuration</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/11/09/%E6%B1%87%E7%BC%96%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E5%8F%8A%E4%BC%AA%E6%8C%87%E4%BB%A4/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/19/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%89%8D%E4%B8%AD%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E7%BB%9F%E4%B8%80%E7%89%88%E6%9C%AC%E8%BF%AD%E4%BB%A3%E5%86%99%E6%B3%95-%E4%BB%85%E7%A7%BB%E5%8A%A8%E5%B7%A6%E4%B8%AD%E5%8F%B3%E9%A1%BA%E5%BA%8F/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/24/%E5%85%B3%E4%BA%8Eneovim%E9%85%8D%E7%BD%AEspacevim%E7%9A%84lspconfig%E9%97%AE%E9%A2%98%E8%B8%A9%E5%9D%91%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/24/关于neovim配置spacevim的lspconfig问题踩坑与解决方法记录/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

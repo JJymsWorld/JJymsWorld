@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>射线法判断点是否在多边形内 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/">
+                            计算机图形学
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                射线法判断点是否在多边形内
+            
+            
+        </div>
+        <span class="post-date">
+            7月 16, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="原理介绍"><a href="#原理介绍" class="headerlink" title="原理介绍"></a>原理介绍</h2><p>基础原理这里不再概述</p>
+<p>介绍对于点在多边形顶点，点在边上等判断方法</p>
+<ol>
+<li>判断点是否在线上的方法有很多，比较简单直接的就是计算点与两个多边形顶点的连线斜率是否相等，中学数学都学过</li>
+<li>点和多边形顶点重合的情况更简单，直接比较点的坐标就行了</li>
+<li>顶点穿越看似棘手，其实我们换一个角度，思路会大不相同。先来回答一个问题，射线穿越一条线段需要什么前提条件？没错，就是线段两个端点分别在射线两侧。只要想通这一点，顶点穿越就迎刃而解了。这样一来，我们只需要规定被射线穿越的点都算作其中一侧。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/qq171895821/Jymscloudiimmgg@main/img/20170904204203276"></p>
+<p>如上图，假如我们规定射线经过的点都属于射线以上的一侧，显然点D和发生顶点穿越的点C都位于射线Y的同一侧，所以射线Y其实并没有穿越CD这条边。而点C和点B则分别位于射线Y的两侧，所以射线Y和BC发生了穿越，由此我们可以断定点Y在多边形内。同理，射线X分别与AD和CD都发生了穿越，因此点X在多边形外，而射线Z没有和多边形发生穿越，点Z位于多边形外。</p>
+<ol start="4">
+<li>解决了第三点，这一点就毫无难度了。根据上面的假设，射线连续经过的两个顶点显然都位于射线以上的一侧，因此这种情况看作没有发生穿越就可以了。由于第三点的解决方案实际上已经覆盖到这种特例，因此不需要再做特别的处理。</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>C++再MFC中的实现:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">PointJudge</span><span class="params">(POINT p, POINT* poly, <span class="type">int</span> ploySize)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * @param &#123;POINT&#125; p  待判断点的坐标。</span></span><br><span class="line"><span class="comment">    * @param &#123;POINT *&#125; poly  多边形各点的坐标集合</span></span><br><span class="line"><span class="comment">    * @param &#123;int&#125; polySize 多边形边的数量（多边形顶点的数量）</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="type">int</span> px = p.x;</span><br><span class="line">    <span class="type">int</span> py = p.y;</span><br><span class="line">    <span class="type">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">    <span class="type">int</span> i, l, j;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>,  l = ploySize,  j = l - <span class="number">1</span>; i &lt; l; j = i, i++) &#123;</span><br><span class="line">        <span class="type">int</span> sx = poly[i].x;</span><br><span class="line">        <span class="type">int</span> sy = poly[i].y;</span><br><span class="line">        <span class="type">int</span> tx = poly[j].x;</span><br><span class="line">        <span class="type">int</span> ty = poly[j].y;</span><br><span class="line">        <span class="keyword">if</span> ((sx == px &amp;&amp; sy == py) || (tx == px &amp;&amp; ty == py)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;内部&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ((sy &lt; py &amp;&amp; ty &gt;= py) || (sy &gt;= py &amp;&amp; ty &lt; py)) &#123;</span><br><span class="line">            <span class="type">int</span> x = sx + (py - sy) * (tx - sx) / (ty - sy);</span><br><span class="line">            <span class="keyword">if</span> (x == px) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;边上&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (x &gt; px) &#123;</span><br><span class="line">                flag = !flag;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flag%<span class="number">2</span> != <span class="number">0</span> ? <span class="string">&quot;内部&quot;</span> : <span class="string">&quot;外部&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>JavaScript实现:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span> 射线法判断点是否在多边形内部</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Object</span>&#125; p 待判断的点，格式：&#123; x: X坐标, y: Y坐标 &#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Array</span>&#125; poly 多边形顶点，数组成员的格式同 p</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">String</span>&#125; 点 p 和多边形 poly 的几何关系</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">rayCasting</span>(<span class="params">p, poly</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> px = p.<span class="property">x</span>,</span><br><span class="line">      py = p.<span class="property">y</span>,</span><br><span class="line">      flag = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, l = poly.<span class="property">length</span>, j = l - <span class="number">1</span>; i &lt; l; j = i, i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> sx = poly[i].<span class="property">x</span>,</span><br><span class="line">        sy = poly[i].<span class="property">y</span>,</span><br><span class="line">        tx = poly[j].<span class="property">x</span>,</span><br><span class="line">        ty = poly[j].<span class="property">y</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 点与多边形顶点重合</span></span><br><span class="line">    <span class="keyword">if</span>((sx === px &amp;&amp; sy === py) || (tx === px &amp;&amp; ty === py)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&#x27;on&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断线段两端点是否在射线两侧</span></span><br><span class="line">    <span class="keyword">if</span>((sy &lt; py &amp;&amp; ty &gt;= py) || (sy &gt;= py &amp;&amp; ty &lt; py)) &#123;</span><br><span class="line">      <span class="comment">// 线段上与射线 Y 坐标相同的点的 X 坐标</span></span><br><span class="line">      <span class="keyword">var</span> x = sx + (py - sy) * (tx - sx) / (ty - sy)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 点在多边形的边上</span></span><br><span class="line">      <span class="keyword">if</span>(x === px) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;on&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 射线穿过多边形的边界</span></span><br><span class="line">      <span class="keyword">if</span>(x &gt; px) &#123;</span><br><span class="line">        flag = !flag</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 射线穿过多边形边界的次数为奇数时点在多边形内</span></span><br><span class="line">  <span class="keyword">return</span> flag ? <span class="string">&#x27;in&#x27;</span> : <span class="string">&#x27;out&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/07/16/bresenham%E6%94%B9%E8%BF%9B%E7%AE%97%E6%B3%95/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/16/%E7%A7%8D%E5%AD%90%E5%A1%AB%E8%89%B2%E7%AE%97%E6%B3%95/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/16/%E5%B0%84%E7%BA%BF%E6%B3%95%E5%88%A4%E6%96%AD%E7%82%B9%E6%98%AF%E5%90%A6%E5%9C%A8%E5%A4%9A%E8%BE%B9%E5%BD%A2%E5%86%85/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/16/射线法判断点是否在多边形内/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>SpringBoot静态资源的访问 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/SpringBoot/">
+                            SpringBoot
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                SpringBoot静态资源的访问
+            
+            
+        </div>
+        <span class="post-date">
+            7月 16, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>近期在维护一个实验室的项目的时候遇到了不少问题，大致问题就是项目本身原本采用的是前后端打包部署的方式，而我们采用了分离部署的方式，结果是前后端口不一致，产生了许多跨域问题，比如不能发送cookie的session等，导致页面登录状态不能维持。</p>
+<p>随后为了了解打包部署研究了一下SpringBoot的静态资源，这里简单记录一下。</p>
+<h4 id="静态资源"><a href="#静态资源" class="headerlink" title="静态资源"></a>静态资源</h4><p>所谓静态资源就是前端生成的js,css,image,html等文件</p>
+<p>下面部分转载自简书，Author：lavor</p>
+<h4 id="SpringBoot的默认静态资源映射"><a href="#SpringBoot的默认静态资源映射" class="headerlink" title="SpringBoot的默认静态资源映射"></a>SpringBoot的默认静态资源映射</h4><p>默认情况下，我们只需要将静态资源放在一下几个目录中就可以直接通过url在浏览器中访问了。</p>
+<ul>
+<li><code>/META-INF/resources/</code></li>
+<li><code>/resources/</code></li>
+<li><code>/static/</code></li>
+<li><code>/public/</code></li>
+</ul>
+<img :src="$withBase('/images/springbootstatic_1.webp')" alt="springbootstatic_1">
+
+
+
+
+
+<p>如果这四个目录中有相同的静态资源文件，那么优先访问哪个目录下面的资源啊？<br> 静态资源的默认访问优先级：<code>/META-INF/resources/</code>&gt;<code>/resources/</code>&gt;<code>/static/</code>&gt;<code>/public/</code></p>
+<p>在四个目录中都放一个static.html的文件，每个html文件中都说明自己所在的目录，访问结果如下：</p>
+<img :src="$withBase('/images/springbootstatic_2.webp')" alt="springbootstatic_2">
+
+<p>SpringBoot关于静态资源的访问涉及到了application.properties中的两个属性：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># 默认值为 /*</span></span><br><span class="line">spring.mvc.<span class="keyword">static</span>-path-pattern= <span class="meta">#这里设置静态资源匹配的url-pattern</span></span><br><span class="line"><span class="meta"># 默认值为 classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/ </span></span><br><span class="line">spring.resources.<span class="keyword">static</span>-locations= <span class="meta">#这里设置要指向的路径，多个使用英文逗号隔开，在前面的优先级高</span></span><br></pre></td></tr></table></figure>
+
+<p>此时，我们豁然开朗，知道默认情况下静态资源为什么放在<code>/META-INF/resources/</code>、<code>/resources/</code>、<code>/static/</code>、<code>/public/</code>这四个目录了，还有这四个目录访问的优先级是怎么来的了。</p>
+<p>修改静态资源映射的方法：</p>
+<ul>
+<li>我们可以修改这两个属性来改变静态资源的映射，比如我们的所有静态资源都在<code>mystatic</code>目录中，并且我们希望访问静态资源的的url都带有<code>/mystatic/</code>这个目录前缀:</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spring.mvc.<span class="type">static</span>-path-pattern=/mystatic<span class="comment">/*</span></span><br><span class="line"><span class="comment">spring.resources.static-locations= classpath:mystatic/</span></span><br></pre></td></tr></table></figure>
+
+<p>在<code>resources</code>资源目录中创建一个<code>mystatic</code>目录，在该目录下面创建一个<code>static.html</code>文件，访问结果如下：</p>
+<img :src="$withBase('/images/springbootstatic_3.webp')" alt="springbootstatic_3">
+
+
+
+<ul>
+<li><p>继承</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WebMvcConfigurerAdapter</span><br></pre></td></tr></table></figure>
+
+<p>类，并且重写</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addResourceHandlers</span><br></pre></td></tr></table></figure>
+
+<p>方法就行，该操作与上面的方法得到的效果是一样的</p>
+<img :src="$withBase('/images/springbootstatic_4.webp')" alt="springbootstatic_4"></li>
+</ul>
+<p><strong>注意：还可以设置外部磁盘目录，设置方式不变，格式如下：<code>file:d/mystatic/</code>。</strong></p>
+<h3 id="WebJars"><a href="#WebJars" class="headerlink" title="WebJars"></a>WebJars</h3><hr>
+<p><code>WebJars</code>将前端资源（css,js,image,html等等）打包到jar中，然后使用基于<code>JVM</code>的包管理器（比如 <code>Maven</code>、<code>Gradle</code> 等）管理前端依赖的方案。SpringBoot中也可以通过WebJars来访问静态资源。<br> SpringBoot默认将<code>/webjars/**</code>映射到 <code>classpath:/META-INF/resources/webjars/</code>。</p>
+<ul>
+<li><code>/webjars/**</code>：表示<code>/webjars/</code>目录下的所有文件，及存在其目录下的jar包中的所有文件。</li>
+</ul>
+<p>所以默认情况下我们需要访问<code>WebJars</code>中的资源，需要将其jar包放到<code>classpath:/META-INF/resources/webjars/</code>目录中。<br> 我们来使用一下<code>WebJars</code>:</p>
+<ul>
+<li>在<code>pom.xml</code>中引入<code>jquery</code>的<code>WebJars</code>，默认会被放在<code>classpath:/META-INF/resources/webjars/</code>目录中</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.webjars<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jquery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在前端<code>webjars.html</code>页面中引入<code>jquery</code></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;/webjars/jquery/2.1.1/jquery.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>访问页面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webjars.html</span><br></pre></td></tr></table></figure>
+
+<p>，查看源码，可以链接到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jquery.js</span><br></pre></td></tr></table></figure>
+
+<p>的内容</p>
+<img :src="$withBase('/images/springbootstatic_5.webp')" alt="springbootstatic_5"></li>
+</ul>
+<h4 id="版本号统一管理"><a href="#版本号统一管理" class="headerlink" title="版本号统一管理"></a>版本号统一管理</h4><hr>
+<p>如果我们有很多页面都是用了<code>WebJars</code>中的资源，而我们现在要升级<code>WebJars</code>的版本，岂不是要在每个页面中都改动一下，这样很麻烦啊，有没有简单的方法啊。此时，我们可以进行版本号统一管理。</p>
+<ul>
+<li>在<code>pom.xml</code>中引入<code>jquery</code>的<code>WebJars</code>的基础上添加：</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.webjars<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>webjars-locator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>添加版本号统一管理的控制器</p>
+<img :src="$withBase('/images/Springbootstatic_6.webp')" alt="Springbootstatic_6">
+</li>
+<li><p>在页面中引入<code>jquery</code>的方式如下：</p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;/webjarslocator/jquery/jquery.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="静态资源版本管理"><a href="#静态资源版本管理" class="headerlink" title="静态资源版本管理"></a>静态资源版本管理</h2><hr>
+<p>当我们资源内容发生变化时，由于浏览器缓存，用户本地的静态资源还是旧的资源，为了防止这种情况导致的问题，我们可能会手动在请求url的时候加个版本号或者其他方式。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/lavor.js?v=1.1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>SpringMVC提供了两种方式可以帮助我们很容易地解决这类问题。</p>
+<h3 id="MD5方式"><a href="#MD5方式" class="headerlink" title="MD5方式"></a>MD5方式</h3><hr>
+<ul>
+<li>修改<code>application.properties</code>配置文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spring.resources.chain.strategy.content.enabled=<span class="literal">true</span></span><br><span class="line">spring.resources.chain.strategy.content.paths=/**</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@ControllerAdvice</span><br></pre></td></tr></table></figure>
+
+<p>注解，返回</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ResourceUrlProvider</span><br></pre></td></tr></table></figure>
+
+<p>的对象，这样所有通过控制器返回的模板页面（jsp,thymeleaf,freeemarker等）就都可以在页面中使用该对象了</p>
+<img :src="$withBase('/images/springbootstatic_7.webp')" alt="springbootstatic_7">
+</li>
+<li><p>在控制器返回的模板页面中，添加以下信息，我们这里的返回页面时jsp页面，<code>lavor.js</code>是<code>webapp</code>目录下面的js脚本文件。</p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>  <span class="attr">src</span>=<span class="string">&quot;$&#123;urls.getForLookupPath(&#x27;/lavor.js&#x27;) &#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过浏览器访问控制器的请求url，查看页面源代码</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>  <span class="attr">src</span>=<span class="string">&quot;/lavor-fdfa0502716d517c6cad4f2536aa02a1.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>请求<code>/lavor-fdfa0502716d517c6cad4f2536aa02a1.js</code>，我们MD5配置的<code>paths=/**</code>，所以SpringMVC会尝试url中是否包含<code>-</code>，如果包含会去掉后面这部分，然后去映射的目录（如webapp根目录，上面提到的四大静态映射目录）查找<code>/lavor.js</code>文件，如果能找到就返回。</p>
+<h3 id="版本号方式"><a href="#版本号方式" class="headerlink" title="版本号方式"></a>版本号方式</h3><hr>
+<ul>
+<li>修改<code>application.properties</code>配置文件，<strong>注意MD5方式中的是<code>content</code>，这里是<code>fixed</code></strong></li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spring.resources.chain.strategy.<span class="keyword">fixed</span>.enabled=<span class="literal">true</span></span><br><span class="line"><span class="meta">#版本号处理的路径</span></span><br><span class="line">spring.resources.chain.strategy.<span class="keyword">fixed</span>.paths=<span class="comment">/**</span></span><br><span class="line"><span class="comment"># 版本号，可以为所处理路径中的资源加上/v1.1目录前缀</span></span><br><span class="line"><span class="comment">spring.resources.chain.strategy.fixed.version=v1.1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@ControllerAdvice</span><br></pre></td></tr></table></figure>
+
+<p>注解，返回</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ResourceUrlProvider</span><br></pre></td></tr></table></figure>
+
+<p>的对象，这样所有通过控制器返回的模板页面（jsp,thymeleaf,freeemarker等）就都可以在页面中使用该对象了</p>
+<img :src="$withBase('/images/springbootstatic_7.webp')" alt="springbootstatic_7">
+</li>
+<li><p>在控制器返回的模板页面中，添加以下信息，我们这里的返回页面时jsp页面，<code>lavor.js</code>是<code>webapp</code>目录下面的js脚本文件.</p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>  <span class="attr">src</span>=<span class="string">&quot;$&#123;urls.getForLookupPath(&#x27;/lavor.js&#x27;) &#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过浏览器访问控制器的请求url，查看页面源代码</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>  <span class="attr">src</span>=<span class="string">&quot;/v1.1/lavor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>请求<code>/v1.1/lavor.js</code>，会查看<code>v1.1</code>是不是版本号，如果是就去掉前缀目录，直接查找<code>/lavor.js</code>。</p>
+<p><strong>注意：我们发现如果添加了webapp目录，那么该目录也可以存放静态资源，并且默认情况下访问优先级比<code>/META-INF/resources/</code>还要高。</strong></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/07/16/TensorRT%E8%A7%A3%E5%86%B3Network-must-have-at-least-one-output/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/16/Vscode%E4%B8%ADpython%E6%89%93%E5%8D%B0%E8%BE%93%E5%87%BA%E4%B9%B1%E7%A0%81%E6%88%96%E4%B8%AD%E6%96%87%E4%B8%8D%E8%83%BD%E8%A7%A3%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/16/SpringBoot%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E7%9A%84%E8%AE%BF%E9%97%AE/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/16/SpringBoot静态资源的访问/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

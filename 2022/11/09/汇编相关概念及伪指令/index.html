@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>汇编相关概念及伪指令 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/%E6%B1%87%E7%BC%96/">
+                            汇编
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                汇编相关概念及伪指令
+            
+            
+        </div>
+        <span class="post-date">
+            11月 9, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li><p><strong>汇编语言</strong>：用指令助记符、符号地址、标号、伪指令等符号编写程序的语言成为汇编语言。用这种语言书写的程序叫做汇编语言源程序或者称为源程序。</p>
+</li>
+<li><p><strong>汇编</strong>：把汇编语言源程序翻译成在机器上能执行的机器语言程序的过程叫做<strong>汇编</strong>，完成汇编过程的程序叫做汇编程序。</p>
+</li>
+<li><p><strong>交叉汇编</strong>：一个机器汇编，另一个机器执行。</p>
+</li>
+<li><p><strong>驻留汇编</strong>：一个机器自身汇编，并且汇编结果在自身机器上运行。</p>
+</li>
+<li><p><strong>汇编语句的格式</strong>：</p>
+<p>[标号]   指令助记符   [操作数]   [; 注解]</p>
+<p>其中标号例如：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> 1 assume cs:code</span><br><span class="line"> 2 code segment</span><br><span class="line"> 3     a: db 1, 2, 3, 4, 5, 6, 7, 8</span><br><span class="line"> 4     b: dw 0</span><br><span class="line"> 5 start:     mov si, offset a</span><br><span class="line"> 6           mov bx, offset b</span><br><span class="line"> 7           mov cx, 8</span><br><span class="line"> 8 s:           mov al, cs:[si]</span><br><span class="line"> 9           add cs:[bx], al</span><br><span class="line">10           inc si</span><br><span class="line">11           loop s</span><br><span class="line">12   </span><br><span class="line">13           mov ax, 4c00h</span><br><span class="line">14           int 21h</span><br><span class="line">15 code ends</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中code, start, s: 皆为标号，仅表示内存单元的地址，对于”:”的地址标号，仅可在代码段中使用。</p>
+<ul>
+<li>汇编语言中出现的常数可以有<strong>7种</strong>：二进制数，八进制数，十进制数，十六进制数，十进制浮点数，十六进制浮点数，字符和字符串。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MOV AL, 01000001B ;二进制数</span><br><span class="line">MOV AL, 65 ;十进制数</span><br><span class="line">MOV AL, 65D ;十进制数</span><br><span class="line">MOV AL, 41H ;十六进制数</span><br><span class="line">MOV AL, 0F8H ;十六进制数(当数字的一个字符是A-F时，在字符前添加一个数字0以区分变量)</span><br><span class="line">MOV AL, <span class="string">&#x27;B&#x27;</span> ;字符和字符串</span><br></pre></td></tr></table></figure>
+
+<h2 id="伪指令"><a href="#伪指令" class="headerlink" title="伪指令"></a><strong>伪指令</strong></h2><p>类似于C语言中的标识符，常用于数据定义，存储控件分配，条件转移，运算等。</p>
+<ul>
+<li><strong>定义数据伪指令</strong>：<ul>
+<li>DB-定义字节，每个数据一个字节。</li>
+<li>DW-定义字，每个数据两个字节。</li>
+<li>DD-定义双字，每个数据四个字节。</li>
+<li>DQ-定义4字，每个数据八个字节。</li>
+<li>DT-定义10个字节，每个数据十个字节，用于压缩式十进制数。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DATA1 DB 5,6,7,100 ;即DATA1为该组数的首地址，从此地址开始存放5，6，7，100每个数一个字节，共占四个字节。</span><br><span class="line"></span><br><span class="line">DATA2 DB ? ;也可以不存放数据，?表示在DATA2单元中存放的内容是随机的。</span><br><span class="line"></span><br><span class="line">STR1 DB <span class="string">&#x27;aabbc&#x27;</span> ;字符串以ASCII码的形式存放，每个字符占用一个字节，用单引号包裹。</span><br><span class="line">STR2 DW <span class="string">&#x27;ab&#x27;</span> ;DW只可以用来定义只含有两个字符的字符串！！！</span><br><span class="line"></span><br><span class="line">BUF1 DB 20 DUP(?) ;重复数据定义使用DUP操作符，该句表示定义20个内容随机的数据。</span><br><span class="line">BUF2 DB 10 DUP(2, 2 DUP (3)) ;DUP可嵌套使用，该句表示分配30个存储单元给BUF2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>段定义伪指令SEGMENT和ENDS</strong><br>一般来说，一个完整的汇编源程序至少由3个段组成，即堆栈段，数据段和代码段。段定义伪指令可将源程序划分为若干段，以便生成目的代码和链接的时候将同名段进行组合。</p>
+<p>段定义的一般格式为：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">段名  SEGMENT  [定位类型] [组合类型] [类别]</span><br><span class="line">      段内容</span><br><span class="line">      ...</span><br><span class="line">      ...</span><br><span class="line">      ...</span><br><span class="line">段名  ENDS</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;注意SEGMENT与ENDS须成对使用，缺一不可。</p>
+<ul>
+<li><strong>设定段寄存器伪指令ASSUME</strong>: ASSUME——段寄存器定义伪指令。用于指明各段，放在代码段内，放在段定义语句之后。<br>格式: <code>ASSUME CS: CODE, DS: DATA, SS: STACK</code></li>
+</ul>
+<blockquote>
+<p>段分配语句只建立当前段和段寄存器之间的关系，但段分配语句并不能将各段的地址装入段寄存器。</p>
+</blockquote>
+<pre><code>**段组：**
+
+段组伪指令GROUP是用于把源程序模块中的若干个段结合成一个组，并对该段组定义一个段组名。段组伪指令格式如下：
+
+`段组名 GROUP 段名 [, 段名, ......]`
+</code></pre>
+<p>其中段名之间要用逗号分隔。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">DATA1	SEGMENT	;第一个数据段</span><br><span class="line">        b1	DB　10h</span><br><span class="line">DATA1	ENDS</span><br><span class="line">DATA2	SEGMENT	;第二个数据段</span><br><span class="line">        b2	DB　23h</span><br><span class="line">DATA2	ENDS</span><br><span class="line">CODE1	SEGMENT</span><br><span class="line">	ASSUME　CS:CODE1, DS:DATA1	;(1)</span><br><span class="line">	MOV	AX, DATA1</span><br><span class="line">        MOV	DS, AX 	;(2)把数据段DATA1的段值赋给段寄存器DS</span><br><span class="line">        ...</span><br><span class="line">        MOV	BL, b1	;(3)引用DS来访问DATA1中的变量b1</span><br><span class="line">        ...</span><br><span class="line">START:	ASSUME　DS:DATA2	;(4)</span><br><span class="line">        MOV	AX, DATA2</span><br><span class="line">        MOV	DS, AX	;(5)把数据段DATA2的段值赋给段寄存器DS</span><br><span class="line">        ...</span><br><span class="line">        MOV	AL, b2	;(6)引用DS来访问DATA2中的变量b2</span><br><span class="line">        ...</span><br><span class="line">CODE1	ENDS</span><br><span class="line">	END	START</span><br></pre></td></tr></table></figure>
+
+<p>在上例中，语句(1)说明DS与DATA1建立联系，语句(2)对DS赋值，语句(3)用DS来访问DATA1段的变量名。语句(4)说明DS与DATA2建立联系，语句(5)对DS赋值，语句(6)用DS来访问DATA2段的变量名。</p>
+<p>在该例子中，因为只使用一个段寄存器DS来对应二个数据段，所以，需要切换DS的对应关系(如：语句(4))。但我们也可以用段寄存器DS和ES来分别对应段DATA1和DATA2，这样，方法1就可变成方法2。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">DATA1	SEGMENT</span><br><span class="line">	b1	DB　10h</span><br><span class="line">DATA1	ENDS</span><br><span class="line">DATA2	SEGMENT</span><br><span class="line">	b2	DB　23h</span><br><span class="line">DATA2	ENDS</span><br><span class="line">CODE1	SEGMENT</span><br><span class="line">	ASSUME　CS:CODE1, DS:DATA1, ES:DATA2</span><br><span class="line">START:	MOV	AX, DATA1</span><br><span class="line">	MOV	DS, AX 	;把数据段DATA1的段值赋给段寄存器DS</span><br><span class="line">	MOV	AX, DATA2</span><br><span class="line">	MOV	ES, AX	;把数据段DATA2的段值赋给段寄存器ES</span><br><span class="line">	...</span><br><span class="line">	MOV	BL, b1	;引用DS来访问DATA1中的变量b1</span><br><span class="line">        ...</span><br><span class="line">        MOV	AL, b2	;引用ES来访问DATA2中的变量b2</span><br><span class="line">        ...</span><br><span class="line">CODE1	ENDS</span><br><span class="line">	END	START</span><br></pre></td></tr></table></figure>
+
+<p>我们还可以用段组来简化段寄存器的使用，把段DATA1和DATA2组成一个数据段。所以，把方法2再改写成方法3的形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">GSEG	GROUP	DATA1, DATA2	;把段DATA1和DATA2定义成一个段组</span><br><span class="line">DATA1	SEGMENT</span><br><span class="line"> 	b1	DB　10h</span><br><span class="line">DATA1	ENDS</span><br><span class="line">DATA2	SEGMENT</span><br><span class="line">	b2	DB　23h</span><br><span class="line">DATA2	ENDS</span><br><span class="line">CODE1	SEGMENT</span><br><span class="line">	ASSUME　CS:CODE1, DS:GSEG</span><br><span class="line">START:	MOV	AX, GSEG</span><br><span class="line">	MOV	DS, AX 	;把段组GSEG的段值赋给段寄存器DS</span><br><span class="line">	...</span><br><span class="line">	MOV	BL, b1	;引用DS来访问DATA1中的变量b1</span><br><span class="line">	...</span><br><span class="line">	MOV	AL, b2	;引用DS来访问DATA2中的变量b2</span><br><span class="line">	...</span><br><span class="line">CODE1	ENDS</span><br><span class="line">	END	START</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>表达式赋值伪指令EQU</strong>：EQU伪指令给符号定义一个值，类似于C语言的 <code>#define</code>凡是出现该符号的地方，汇编是均用其值代替。</p>
+<p>格式：<code>符号名 EQU 表达式</code></p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">表达式可以是常数、数值表达式、地址表达式、变量、标号或者指令助记符</span><br><span class="line">DATA1 EQU 50</span><br><span class="line">DATA DB DATA1 DUP(?) ;表示给DATA分配50个字节的存储空间，存储内容随机。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>地址定义伪指令$:</strong></p>
+<p><code>$</code>表示地址计数器的值。地址计数器保存当前正在汇编的指令或数据的偏移地址。汇编程序每扫描一个字节，地址计数器的值加1</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">JMP $ ;程序跳转到本条指令，即进入死循环状态。该语句一般用于等待中断的发生。</span><br><span class="line"></span><br><span class="line">再如</span><br><span class="line">DATA SEGMENT</span><br><span class="line">	ARRAY DB &#x27;PROGRAM&#x27;</span><br><span class="line">	NUM EQU $-ARRAY ;$表示当前指令的偏移地址值，ARRAY是变量名，表示变量ARRAY的偏移地址值，$-ARRAY是以变量ARRAY为其值地址的连续字节数，即变量名为ARRAY的字符串的字符个数</span><br><span class="line">DATA ENDS</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>过程定义伪指令PROC与ENDP</strong></p>
+<p>过程——子程序(可被程序调用)，汇编语言规定必须对过程进行定义。过程定义之后就可对调用指令CALL与返回执行RET进行正确的汇编。</p>
+<p>如果过程中要用到某些寄存器或者存储单元，为了不破坏原有信息，要将寄存器或存储单元的原有内容压栈保护或存入子程序不用的寄存器或存储单元中。起保护作用的程序段可以放在主程序中，亦可放在子程序中。</p>
+<p>过程定义的语句格式为：</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">过程名 PROC NEAR/FAR</span><br><span class="line">	语句</span><br><span class="line">	...</span><br><span class="line">	RET ;过程的最后一条执行指令，将堆栈内保存的返回地址弹出，以实现程序的正确返回</span><br><span class="line">过程名 ENDP</span><br></pre></td></tr></table></figure>
+
+<p>其中,NEAR(近过程)表示该过程与调用指令CALL处在同一代码段中(段名相同)，只需将返回位置的偏移地址压入堆栈。</p>
+<p>FAR(远过程)表示该过程与调用指令CALL处在不同的代码段中(段名不同)，需将返回位置的偏移地址与段基址都压入堆栈。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">CODE SEGMENT PARA PUBLIC &#x27;CODE&#x27;</span><br><span class="line">  ASSUME CS: CODE, DS: DATA, SS: STACK</span><br><span class="line">  SUBB1 PROC NEAR/FAR</span><br><span class="line">        语句</span><br><span class="line">        ...</span><br><span class="line">        RET</span><br><span class="line">  SUBB1 ENDP</span><br><span class="line">START:</span><br><span class="line">  CALL SUBB1</span><br><span class="line">  ...</span><br><span class="line">  CALL SUBB1</span><br><span class="line">  ...</span><br><span class="line">CODE ENDS</span><br><span class="line">  END START</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>模块定义伪指令NAME&#x2F;END</strong></li>
+</ul>
+<p>用于定义一个模块。在链接目标模块时将使用该模块名，汇编处理只进行到模块结束语句</p>
+<p>格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NAME 模块名</span><br><span class="line">	...</span><br><span class="line">END 标号</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>END伪指令</strong></li>
+</ul>
+<p>一个程序模块只允许有一个END语句，后为主模块真起始地址</p>
+<p>格式：<code>END [起始地址标号]</code></p>
+<ul>
+<li><strong>PUBLIC伪指令</strong></li>
+</ul>
+<p>用来说明已知模块中哪些标识符是公共的，可以别其他模块引用</p>
+<p>格式：<code>PUBLIC 符号</code></p>
+<p>符号可以是本模块已定义的变量、标号、变量名、过程名等</p>
+<ul>
+<li>EXTERN伪指令</li>
+</ul>
+<p>用于说明模块中哪些标识符是外部的，即其他模块中已被PUBLIC伪指令说明的符号</p>
+<p>格式：<code>EXTERN 符号名: 类型[, 符号名: 类型...]</code></p>
+<ul>
+<li>宏定义伪指令</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">MOV CL, 4</span><br><span class="line">SAL AL, CL</span><br><span class="line"></span><br><span class="line">若该两条指令在程序中要多次使用，就可以用一条宏命令来代替，当然在使用宏命令前要首先对其进行定义，格式如下：</span><br><span class="line"></span><br><span class="line">SHIFT MACRO</span><br><span class="line">	MOV CL, 4</span><br><span class="line">	SAL AL, CL</span><br><span class="line">	ENDM</span><br><span class="line">这样定义之后，凡是要使AL中内容左移4位的操作都可以用一条宏命令SHIFT来代替。宏命令一般格式为：</span><br><span class="line">宏命令名 MACRO[形式参量表]</span><br><span class="line">	...</span><br><span class="line">	...宏体</span><br><span class="line">	...</span><br><span class="line">	ENDM</span><br></pre></td></tr></table></figure>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/11/09/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%BF%90%E7%AE%97%E7%AC%A6/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/24/%E5%85%B3%E4%BA%8Eneovim%E9%85%8D%E7%BD%AEspacevim%E7%9A%84lspconfig%E9%97%AE%E9%A2%98%E8%B8%A9%E5%9D%91%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/11/09/%E6%B1%87%E7%BC%96%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E5%8F%8A%E4%BC%AA%E6%8C%87%E4%BB%A4/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/11/09/汇编相关概念及伪指令/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

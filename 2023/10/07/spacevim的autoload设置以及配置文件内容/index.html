@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>spacevim的autoload设置以及配置文件内容 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/neovim/">
+                            neovim
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/spacevim/">
+                            spacevim
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/vim/">
+                            vim
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                spacevim的autoload设置以及配置文件内容
+            
+            
+        </div>
+        <span class="post-date">
+            10月 7, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p><code>~\Spacevim.d\autoload</code>下的预加载配置文件  </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function!</span> <span class="title">myspacevim</span>#before<span class="params">()</span> abort</span><br><span class="line">        <span class="keyword">set</span> timeoutlen=<span class="number">100</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">g:python3_host_prog</span> = <span class="built_in">expand</span>(<span class="string">&quot;C:\\Users\\17189\\miniconda3\\python.exe&quot;</span>)</span><br><span class="line"><span class="keyword">endfunction</span></span><br></pre></td></tr></table></figure>
+<p>上面的<code>g:python3_host_prog</code>在windows系统中使用如果不指定会出现找不到python环境，并且python环境目录下必须要有<code>python3.exe</code>，可以复制一个出来，在linux系统下使用时暂时未发现这个问题。<br>下面是<code>spacevim</code>的配置文件</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">#=============================================================================</span><br><span class="line"># basic.toml --- basic configuration example <span class="keyword">for</span> SpaceVim</span><br><span class="line"># Copyright (<span class="keyword">c</span>) <span class="number">2016</span>-<span class="number">2023</span> Wang Shidong &amp; Contributors</span><br><span class="line"># Author: Wang Shidong &lt; wsdjeg@outlook.<span class="keyword">com</span> &gt;</span><br><span class="line"># URL: https://spacevim.org</span><br><span class="line"># License: GPLv3</span><br><span class="line">#=============================================================================</span><br><span class="line"></span><br><span class="line"># All SpaceVim option below [option] section</span><br><span class="line">[<span class="keyword">options</span>]</span><br><span class="line">    # <span class="keyword">set</span> spacevim theme. by default <span class="keyword">colorscheme</span> layer <span class="keyword">is</span> not loaded,</span><br><span class="line">    # <span class="keyword">if</span> you want <span class="keyword">to</span> use more <span class="keyword">colorscheme</span>, please load the <span class="keyword">colorscheme</span></span><br><span class="line">    # layer</span><br><span class="line">    <span class="keyword">colorscheme</span> = <span class="string">&quot;onedark&quot;</span></span><br><span class="line">    colorscheme_bg = <span class="string">&quot;dark&quot;</span></span><br><span class="line">    # Disable guicolors in basic <span class="keyword">mode</span>, many terminal <span class="keyword">do</span> not support <span class="number">24</span>bit</span><br><span class="line">    # true colors</span><br><span class="line">    enable_guicolors = true</span><br><span class="line">    # Disable statusline separator, <span class="keyword">if</span> you want <span class="keyword">to</span> use other value, please</span><br><span class="line">    # install nerd fonts</span><br><span class="line">    statusline_separator = <span class="string">&quot;nil&quot;</span></span><br><span class="line">    statusline_iseparator = <span class="string">&quot;bar&quot;</span></span><br><span class="line">    buffer_index_type = <span class="number">4</span></span><br><span class="line">    windows_index_type = <span class="number">3</span></span><br><span class="line">    enable_tabline_filetype_icon = false</span><br><span class="line">    enable_statusline_mode = false</span><br><span class="line">    statusline_unicode = false</span><br><span class="line">    # Enable <span class="keyword">vim</span> compatible <span class="keyword">mode</span>, avoid changing origin <span class="keyword">vim</span> key bindings</span><br><span class="line">    bootstrap_before = <span class="string">&quot;myspacevim#before&quot;</span></span><br><span class="line">    vimcompatible = true</span><br><span class="line">    relativenumber = false</span><br><span class="line">    default_indent = <span class="number">4</span></span><br><span class="line">    expand_tab = true</span><br><span class="line">    disabled_plugins = [<span class="string">&quot;delimitMate&quot;</span>]</span><br><span class="line">    # autocomplete_method = <span class="string">&quot;coc&quot;</span></span><br><span class="line"></span><br><span class="line">[[custom_plugins]]</span><br><span class="line">repo = <span class="string">&quot;jiangmiao/auto-pairs&quot;</span></span><br><span class="line">merged = false</span><br><span class="line"></span><br><span class="line"># Enable autocomplete layer</span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&#x27;autocomplete&#x27;</span></span><br><span class="line">auto_completion_return_key_behavior = <span class="string">&quot;complete&quot;</span></span><br><span class="line">auto_completion_tab_key_behavior = <span class="string">&quot;cycle&quot;</span></span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&#x27;shell&#x27;</span></span><br><span class="line">default_position = <span class="string">&#x27;top&#x27;</span></span><br><span class="line">default_height = <span class="number">30</span></span><br><span class="line">default_shell = <span class="string">&quot;terminal&quot;</span></span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&quot;colorscheme&quot;</span></span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&quot;sudo&quot;</span></span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&quot;lang#c&quot;</span></span><br><span class="line">enable_clang_syntax_highlight = true</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&quot;lang#python&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&quot;lsp&quot;</span></span><br><span class="line">enabled_clients = [</span><br><span class="line">    <span class="string">&#x27;clangd&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;pylsp&#x27;</span>,</span><br><span class="line">]</span><br><span class="line">    [layers.clang_std]</span><br><span class="line">        cpp = <span class="string">&quot;c11&quot;</span></span><br><span class="line">filetypes = [</span><br><span class="line">    <span class="string">&quot;c&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cpp&quot;</span>,</span><br><span class="line">    <span class="string">&quot;python&quot;</span>,</span><br><span class="line">]</span><br><span class="line">    [layers.override_cmd]</span><br><span class="line">        <span class="keyword">c</span> = [<span class="string">&quot;clangd&quot;</span>]</span><br><span class="line">        cpp = [<span class="string">&quot;clangd&quot;</span>]</span><br><span class="line">        <span class="keyword">python</span> = [<span class="string">&quot;pylsp&quot;</span>]</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = <span class="string">&quot;format&quot;</span></span><br><span class="line"></span><br><span class="line"># [[layers]]</span><br><span class="line"># name = <span class="string">&quot;lang#ipynb&quot;</span></span><br></pre></td></tr></table></figure>
+<p>PS:<code>Spacevim</code>最新的版本在直接使用内部的代码执行会有问题，建议使用旧版本或者等待2.3.0之后的版本再继续使用。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2023/11/05/%E6%9C%8D%E5%8A%A1%E5%99%A8ssh%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8Miniconda%E9%85%8D%E7%BD%AEpython%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E4%BB%A5%E5%8F%8Atmux%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2023/06/10/spacevim%E4%BF%AE%E6%94%B9%E7%A9%BA%E6%A0%BC%E5%BB%B6%E8%BF%9F/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2023/10/07/spacevim%E7%9A%84autoload%E8%AE%BE%E7%BD%AE%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2023/10/07/spacevim的autoload设置以及配置文件内容/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

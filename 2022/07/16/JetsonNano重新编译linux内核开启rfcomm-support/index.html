@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>JetsonNano重新编译linux内核开启rfcomm_support | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/JetsonNano/">
+                            JetsonNano
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                JetsonNano重新编译linux内核开启rfcomm_support
+            
+            
+        </div>
+        <span class="post-date">
+            7月 16, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>处理Jetson Nano开发版Ubuntu系统读取外部设备蓝牙传输的数据时，串口调试无法连接。<code>lsusb</code>命令可以查看到蓝牙适配器是存在的，<code>hcitool scan</code>也是可以搜索到外部的蓝牙设备的，<code>ls /dev/rf*</code>没有返回任何的rfcomm*，只有一个&#x2F;dev&#x2F;rfkill，绑定蓝牙物理设备地址的时候，&#96;sudo rfcomm bind 0 xx:xx:xx:xx:xx:xx，返回错误，RFCOMM TTY support not availabel。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>Jetson nano默认的内核不支持RFCOMM协议，可以用一下命令查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcat /proc/config.gz |grep RFCOMM</span><br></pre></td></tr></table></figure>
+
+<p>显示的信息如下所示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONFIG_BT_RFCOMM =  y</span><br><span class="line">CONFIG_BT_RFCOMM_TTY is not set</span><br></pre></td></tr></table></figure>
+
+<p>所以我们需要重新编译kernel的源代码，编译的过程下面介绍，我们需要修改的就是menuconfig上面Bluetooth subsystem support中找到RFCOMM TTY support选项，将它开启即可。</p>
+<h2 id="重新编译内核过程"><a href="#重新编译内核过程" class="headerlink" title="重新编译内核过程"></a>重新编译内核过程</h2><p>教程参考自一个<a target="_blank" rel="noopener" href="https://blog.hypriot.com/post/nvidia-jetson-nano-build-kernel-docker-optimized/">国外大佬的博客</a></p>
+<ol>
+<li><h3 id="查看你的当前linux内核模块的开启情况"><a href="#查看你的当前linux内核模块的开启情况" class="headerlink" title="查看你的当前linux内核模块的开启情况"></a>查看你的当前linux内核模块的开启情况</h3></li>
+</ol>
+<p>首先你可以使用一个脚本查看你的当前linux内核模块的开启情况</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/moby/moby/raw/master/contrib/check-config.s</span><br><span class="line"><span class="built_in">chmod</span> +x check-config.sh</span><br></pre></td></tr></table></figure>
+
+<p>然后执行该脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./check-config.sh</span><br></pre></td></tr></table></figure>
+
+<p>然后你就会得到下图所示的结果</p>
+<p><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/20220427171803.png"></p>
+<p>事实上，这一步的检查如果已经通过上面的命令确定了RFCOMM未开启，不做此检查也是可以的。</p>
+<ol start="2">
+<li><h3 id="准备内核编译环境"><a href="#准备内核编译环境" class="headerlink" title="准备内核编译环境"></a>准备内核编译环境</h3></li>
+</ol>
+<p>在Jetson nano内核编译之前，我们首先需要确认所有的需要的构建工具都已经安装好了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y libncurses5-dev</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>下载适用于Jetson Nano 的Linux内核资源文件</li>
+</ol>
+<p>我们可以在nvidia开发者的官网找到下载链接<a target="_blank" rel="noopener" href="https://developer.nvidia.com/embedded/%EF%BC%8C%E4%B8%8B%E8%BD%BDBSP">https://developer.nvidia.com/embedded/，下载BSP</a> Sources。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/20220427172631.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span></span><br><span class="line">$ <span class="built_in">mkdir</span> -p nano-bsp-sources</span><br><span class="line">$ <span class="built_in">cd</span> nano-bsp-sources</span><br><span class="line">$ wget https://developer.nvidia.com/embedded/l4t/r32_release_v6.1/sources/t210/public_sources.tbz2</span><br><span class="line">$ <span class="built_in">ls</span> -alh Jetson-Nano-public_sources.tbz2</span><br><span class="line">-rw-rw-r-- 1 pirate pirate 133M Mar 16 06:46 Jetson-Nano-public_sources.tbz2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后解压下载得到的文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf public_sources.tbz2  Linux_for_Tegra/source/public/kernel_src.tbz2 --strip-components=3</span><br><span class="line"><span class="built_in">cd</span> Linux_for_Tegra/source/public</span><br><span class="line">tar -xvf kernel_src.tbz2</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><h3 id="编译未修改内核"><a href="#编译未修改内核" class="headerlink" title="编译未修改内核"></a>编译未修改内核</h3></li>
+</ol>
+<p>首先编译一下未修改的内核，以此确认我们已经安装了所有的依赖，并且熟悉一下编译内核的过程，保证后续的不会出错。</p>
+<p>在编译之前，首先需要导入kernel configuration文件，在我们下载的资源里面是没有这个文件的，我们可以直接从当前系统导出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/kernel/kernel-4.9</span><br><span class="line">zcat /proc/config.gz &gt; .config</span><br></pre></td></tr></table></figure>
+
+<p>然后确认一下config文件内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">head</span> -10 .config</span><br></pre></td></tr></table></figure>
+
+<p>然后开始内核编译工作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">make prepare</span><br><span class="line">make modules_prepare</span><br><span class="line"></span><br><span class="line">time make -j5 Image</span><br><span class="line">time make -j5 modules</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/jetson-nano-board-compile-kernel.jpg"></p>
+<p>上述命令执行整个过程大概需要一个小时左右，可以直接在Jetson nano上进行上述工作。</p>
+<ol start="5">
+<li><h3 id="用编译的内核替换当前linux系统的内核"><a href="#用编译的内核替换当前linux系统的内核" class="headerlink" title="用编译的内核替换当前linux系统的内核"></a>用编译的内核替换当前linux系统的内核</h3></li>
+</ol>
+<p>首先可以使用<code>uname -a</code>命令查看当前内核信息，方便后面对比</p>
+<p>在安装内核前，首先备份当前的内核，方便出现问题是我们能够替换回原来的内核。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#backup the old kernel Image file</span></span><br><span class="line">sudo <span class="built_in">cp</span> /boot/Image /boot/Image.original</span><br><span class="line"></span><br><span class="line"><span class="comment">#Install modules and kernel image</span></span><br><span class="line"><span class="built_in">cd</span> /kernel/kernel4.9</span><br><span class="line">sudo make modules_install</span><br><span class="line">sudo <span class="built_in">cp</span> /arch/arm64/boot/Image /boot/Image</span><br><span class="line"></span><br><span class="line"><span class="comment">#确认内核已经更换</span></span><br><span class="line"><span class="built_in">ls</span> -alh /boot/Image*</span><br></pre></td></tr></table></figure>
+
+<p>然后重新启动系统即可，重启后可使用<code>uname -a</code>命令查看当前内核是否已经更改。</p>
+<p>ps：每次更改内核设置都需要编译一个新的内核，然后安装kernel Image和kernel Modules</p>
+<ol start="6">
+<li><h3 id="更改内核设置并重新执行上述内核编译操作"><a href="#更改内核设置并重新执行上述内核编译操作" class="headerlink" title="更改内核设置并重新执行上述内核编译操作"></a>更改内核设置并重新执行上述内核编译操作</h3></li>
+</ol>
+<p>我们使用内核设置的可视化面板<code>menuconfig</code>来更改内核设置。这个工具在我们之前安装的<code>libncurses5-dev</code>中已经包含。相关命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#备份内核设置</span></span><br><span class="line"><span class="built_in">cd</span> /kernel/kernel-4.9</span><br><span class="line"><span class="built_in">cp</span> .config kernel.config.original</span><br><span class="line"></span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/v2-5d665fbef3174a3a981aa6d3b7dfe763_1440w.jpg"></p>
+<p>找到如图所示的位置，按Y键启用该模块。然后重新执行内核编译命令，最后替换到<code>boot/Image</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /kernel/kernel-4.9</span><br><span class="line"></span><br><span class="line"><span class="comment">#编译内核</span></span><br><span class="line">make prepare</span><br><span class="line">make modules_prepare</span><br><span class="line"></span><br><span class="line">time make -j5 Image</span><br><span class="line">time make -j5 modules</span><br><span class="line"></span><br><span class="line"><span class="comment">#替换内核文件</span></span><br><span class="line">sudo make modules_install</span><br><span class="line">sudo <span class="built_in">cp</span> <span class="built_in">arch</span>/arch64/boot/Image /boot/Image</span><br></pre></td></tr></table></figure>
+
+<p>重启操作系统，即完成模块修改和内核替换。</p>
+<h2 id="调试蓝牙模块"><a href="#调试蓝牙模块" class="headerlink" title="调试蓝牙模块"></a>调试蓝牙模块</h2><p>在上面重新编译内核之后，并没有完全解决问题，蓝牙串口模块仍然无法连接。</p>
+<p>这里我使用的是pybluez来进行蓝牙通讯，代码使用的官方实例代码，例子如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bluetooth <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">server_sock = BluetoothSocket(RFCOMM)</span><br><span class="line">server_sock.bind((<span class="string">&quot;&quot;</span>, PORT_ANY))</span><br><span class="line">server_sock.listen(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">port = server_sock.getsockname()[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">uuid = <span class="string">&quot;94f39d29-7d6d-437d-973b-fba39e49d4ee&quot;</span></span><br><span class="line"></span><br><span class="line">advertise_service(server_sock, <span class="string">&quot;SampleServer&quot;</span>,</span><br><span class="line">                  service_id=uuid,</span><br><span class="line">                  service_classes=[uuid, SERIAL_PORT_CLASS],</span><br><span class="line">                  profiles=[SERIAL_PORT_PROFILE],</span><br><span class="line">                  <span class="comment">#                   protocols = [ OBEX_UUID ]</span></span><br><span class="line">                  )</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Waiting for connection on RFCOMM channel %d&quot;</span> % port)</span><br><span class="line"></span><br><span class="line">client_sock, client_info = server_sock.accept()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Accepted connection from &quot;</span>, client_info)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        data = client_sock.recv(<span class="number">1024</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">str</span>(data.decode()) == <span class="string">&#x27;0&#x27;</span>:</span><br><span class="line">            client_sock.send(<span class="string">&quot;verify 0&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(data) == <span class="number">0</span>: <span class="keyword">break</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;received [%s]&quot;</span> % data.decode())</span><br><span class="line"><span class="keyword">except</span> IOError:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;disconnected&quot;</span>)</span><br><span class="line"></span><br><span class="line">client_sock.close()</span><br><span class="line">server_sock.close()</span><br></pre></td></tr></table></figure>
+
+<p>执行此代码，提示错误如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;rfcomm-server.py&quot;</span>, line <span class="number">20</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    profiles = [ SERIAL_PORT_PROFILE ],</span><br><span class="line">  File <span class="string">&quot;/usr/lib/python2.7/site-packages/bluetooth/bluez.py&quot;</span>, line <span class="number">176</span>, <span class="keyword">in</span> advertise_service</span><br><span class="line">    <span class="keyword">raise</span> BluetoothError (<span class="built_in">str</span> (e))</span><br><span class="line">bluetooth.btcommon.BluetoothError: (<span class="number">2</span>, <span class="string">&#x27;No such file or directory&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里有两个方法可以尝试，可以选择对自己有效的方法：</p>
+<p>方法1：</p>
+<p>修改<code>/etc/systemd/system/dbus-org.bluez.service</code>文件中<code>ExecStart=/usr/lib/bluetooth/bluetoothd</code>为<code>ExecStart=/usr/lib/bluetooth/bluetoothd -C</code>，然后执行<code>sudo sdptool add SP</code>，这样便能够生成<code>/var/run/sdp</code>文件，我的情况是已经存在这个文件，所以我没有执行最后一条命令。</p>
+<p>方法2：</p>
+<p>创建一个覆盖文件在<code>/etc/systemd/system/bluetooth.service.d/override.conf</code></p>
+<p>内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line">ExecStart=</span><br><span class="line">ExecStart=/usr/lib/bluetooth/bluetoothd -C</span><br></pre></td></tr></table></figure>
+
+<p>这里的文件夹和文件可能不存在，不存在的话直接创建即可。</p>
+<p>然后重启bluetooth service或者重启操作系统。</p>
+<p>再次执行上面的pybluez代码，通过手机蓝牙串口调试软件即可正常连接。</p>
+<h2 id="其他问题记录"><a href="#其他问题记录" class="headerlink" title="其他问题记录"></a>其他问题记录</h2><ol>
+<li>no advertisable device<br>原因：由于蓝牙不可见导致<br>相关帖子：<a href="https://link.zhihu.com/?target=https://stackoverflow.com/questions/63788077/how-can-i-make-raspberry-pis-bluetooth-discoverable-to-iphone">https://stackoverflow.com/questions/63788077/how-can-i-make-raspberry-pis-bluetooth-discoverable-to-iphone</a><br>解决方案：增加代码在检测到这类错误时，开启蓝牙可发现</li>
+<li>no such file or directory<br>原因：Bluez 5的bug导致，需要使用兼容模式蓝牙<br>相关帖子：<a href="https://link.zhihu.com/?target=https://stackoverflow.com/questions/36675931/bluetooth-btcommon-bluetootherror-2-no-such-file-or-directory">https://stackoverflow.com/questions/36675931/bluetooth-btcommon-bluetootherror-2-no-such-file-or-directory</a><br>解决方案：增加代码在发生该问题时，修改相应文件内容，并重启服务</li>
+<li>Permission denied<br>原因：sdp执行没有权限<br>相关帖子：<a href="https://link.zhihu.com/?target=https://bbs.archlinux.org/viewtopic.php?id=201672">https://bbs.archlinux.org/viewtopic.php?id=201672</a><br>解决方案：增加代码修改&#x2F;var&#x2F;run&#x2F;sdp的权限</li>
+</ol>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/07/16/archlinux%E4%B8%8Bkde-xorg%E8%AE%BE%E7%BD%AEqtcreator%E7%95%8C%E9%9D%A2%E7%BC%A9%E6%94%BE/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/16/%E8%A7%A3%E5%86%B3React%E4%B8%AD%E4%BF%AE%E6%94%B9value%E4%B8%8D%E8%83%BD%E8%A7%A6%E5%8F%91input%E4%BA%8B%E4%BB%B6/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/16/JetsonNano%E9%87%8D%E6%96%B0%E7%BC%96%E8%AF%91linux%E5%86%85%E6%A0%B8%E5%BC%80%E5%90%AFrfcomm-support/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/16/JetsonNano重新编译linux内核开启rfcomm-support/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

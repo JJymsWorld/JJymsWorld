@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>WPF开发中使用pythonnet调用python代码实现热力图 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/WPF/">
+                            WPF
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                WPF开发中使用pythonnet调用python代码实现热力图
+            
+            
+        </div>
+        <span class="post-date">
+            7月 22, 2024
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>开发需求中需要实现一个压力分布的热力图，我在WPF中使用的图表组件是ScottPlot，想实现类似于等高线那种的热力分布图，查遍了所有的文档，都没能找到一个实现方案，于是想从python或者web的图表库中入手，使用ECharts应该也可以实现，但是需要在程序中嵌入一个Web Browser，于是想先研究一下使用python的方法，查阅了很久的资料后，发现了一个github上一个绝配的demo，这里也非常感谢这位大佬，github链接放在下面：<br><a target="_blank" rel="noopener" href="https://github.com/chickenservice/matplotlib.net">chickenservice&#x2F;matplotlib.net: A wrapper to embed interactive matplotlib in WPF applications (github.com)</a></p>
+<p>但是呢，在将这个demo集成到我的项目里时，也遇到了很多的问题，这里记录一下，可供参考。</p>
+<p>首先，我直接将demo的代码clone到本地执行，进行测试，这里需要注意的是，作者在编写这个wrapper的时候，在C#中以及对<code>fig, ax = plt.subplots()</code>进行了封装，在我们的python代码中，不需要出现<code>fig</code>和<code>ax</code>，可以直接使用，但是需要以闭包的形式作为函数参数才传递到需要使用<code>fig和ax</code>的地方。举个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.animation <span class="keyword">as</span> animation</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> scipy.signal <span class="keyword">import</span> convolve2d</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#fig.set_figwidth(19.2)</span></span><br><span class="line"><span class="comment">#fig.set_figheight(10.8)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init</span>(<span class="params">n, ax</span>):</span><br><span class="line">    <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">    state = np.random.choice(a=[<span class="literal">False</span>, <span class="literal">True</span>], size=(n, n))*<span class="number">1</span></span><br><span class="line">    img = ax.imshow(state, interpolation=<span class="string">&#x27;nearest&#x27;</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    con = np.array([</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">game_of_life</span>(<span class="params">state</span>):</span><br><span class="line">        <span class="keyword">from</span> scipy.signal <span class="keyword">import</span> convolve2d</span><br><span class="line">        nghbd = convolve2d(state, con, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">        state = (state*(nghbd == <span class="number">2</span>) + (nghbd == <span class="number">3</span>))</span><br><span class="line">        <span class="keyword">return</span> state</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_update</span>(<span class="params">frame</span>):</span><br><span class="line">        <span class="keyword">nonlocal</span> state</span><br><span class="line">        state = game_of_life(state*<span class="number">1</span>)</span><br><span class="line">        img.set_array(state)</span><br><span class="line">        <span class="keyword">return</span> img,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> state, _update</span><br><span class="line"></span><br><span class="line">s, update = init(<span class="number">100</span>, ax)</span><br><span class="line"></span><br><span class="line">ani = animation.FuncAnimation(</span><br><span class="line">    fig=fig, func=update, frames=<span class="number">360</span>, interval=<span class="number">30</span>, blit=<span class="literal">False</span>, repeat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">fig.canvas.draw()</span><br></pre></td></tr></table></figure>
+<p>在作者的这个示例代码中，我们可以看到是没有对<code>fig</code>和<code>ax</code>进行定义的，而是直接作为参数传递进入了<code>init</code>函数和<code>FuncAnimation</code>中，且这里呢需要将<code>_update</code>函数作为<code>FuncAnimation</code>的参数进行传递，所以需要以闭包的形式获得<code>_update</code>。总之，我们首先需要将我们自己的代码修改层类似demo中的代码的这种形式，才能够在作者的程序中运行python代码，当然这里条件是我也需要使用<code>FuncAnimation</code>这个功能，如果不使用这个功能可能不需要这么麻烦。</p>
+<p>其次，作者使用<code>MplPanel.cs</code>和<code>NetMplAdapter.cs</code>封装了自定义组件<code>MplPanel</code>这样我们可以直接在我们的<code>xmal</code>文件中，去使用这个组件，并且可以直接通过这个组件对象来进行python代码的调用，然后将可视化的图表直接显示在组件中。</p>
+<p>下面讲一下将demo中的代码迁移到我自己的项目中，首先将所有的代码都先迁移到自己的项目中，并全部修改<code>namespace</code>，由于作者使用的是<code>.net7</code>框架，如果是使用<code>.net framework</code>框架的可能需要修改一些代码，比如其中的<code>using</code>的使用，可以使用<code>ChatGPT</code>去问一下，比较好解决。其次有两个文件，一个是<code>backend_wpfagg.py</code>，一个是<code>appsettings.json</code>，这两个文件前者是<code>matplotlib</code>的一个wpf的<code>backend</code>，后者是指定python路径的配置文件，这两个文件只放到项目目录下是没用的，需要放到编译出的可执行文件的目录下，可以自行手动复制进去，也可以配置一下<code>csproj</code>文件，在编译的时候自动复制进去。这里可以参考demo的<code>csproj</code>文件：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;Project Sdk=<span class="string">&quot;Microsoft.NET.Sdk&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;PropertyGroup&gt;</span><br><span class="line">        &lt;OutputType&gt;WinExe&lt;/OutputType&gt;</span><br><span class="line">        &lt;TargetFramework&gt;net7<span class="number">.0</span>-windows&lt;/TargetFramework&gt;</span><br><span class="line">        &lt;Nullable&gt;enable&lt;/Nullable&gt;</span><br><span class="line">        &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;</span><br><span class="line">        &lt;UseWPF&gt;<span class="literal">true</span>&lt;/UseWPF&gt;</span><br><span class="line">        &lt;AllowUnsafeBlocks&gt;<span class="literal">true</span>&lt;/AllowUnsafeBlocks&gt;</span><br><span class="line">        &lt;RootNamespace&gt;Matplotlib.Net&lt;/RootNamespace&gt;</span><br><span class="line">    &lt;/PropertyGroup&gt;</span><br><span class="line"></span><br><span class="line">    &lt;ItemGroup&gt;</span><br><span class="line">      &lt;PackageReference Include=<span class="string">&quot;Microsoft.Extensions.Configuration&quot;</span> Version=<span class="string">&quot;9.0.0-preview.3.24172.9&quot;</span> /&gt;</span><br><span class="line">      &lt;PackageReference Include=<span class="string">&quot;Microsoft.Extensions.Configuration.Json&quot;</span> Version=<span class="string">&quot;9.0.0-preview.3.24172.9&quot;</span> /&gt;</span><br><span class="line">      &lt;PackageReference Include=<span class="string">&quot;pythonnet&quot;</span> Version=<span class="string">&quot;3.0.3&quot;</span> /&gt;</span><br><span class="line">    &lt;/ItemGroup&gt;</span><br><span class="line"></span><br><span class="line">    &lt;ItemGroup&gt;</span><br><span class="line">      &lt;None Update=<span class="string">&quot;backend_wpfagg.py&quot;</span>&gt;</span><br><span class="line">        &lt;CopyToOutputDirectory&gt;Always&lt;/CopyToOutputDirectory&gt;</span><br><span class="line">      &lt;/None&gt;</span><br><span class="line">      &lt;None Update=<span class="string">&quot;appsettings.json&quot;</span>&gt;</span><br><span class="line">        &lt;CopyToOutputDirectory&gt;Always&lt;/CopyToOutputDirectory&gt;</span><br><span class="line">      &lt;/None&gt;</span><br><span class="line">    &lt;/ItemGroup&gt;</span><br><span class="line"></span><br><span class="line">&lt;/Project&gt;</span><br></pre></td></tr></table></figure>
+<p>以及<code>backend_wpfagg.py</code>中的代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">A work-in-progress backend for .NET WPF and potentially other .NET GUI frameworks in the future.</span></span><br><span class="line"><span class="string">::</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    import matplotlib</span></span><br><span class="line"><span class="string">    matplotlib.use(&quot;template&quot;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Copy this file to a directory where Python can import it (by adding the </span></span><br><span class="line"><span class="string">directory to your ``sys.path`` or by packaging it as a normal Python package); </span></span><br><span class="line"><span class="string">e.g. ``import backend_wpfagg`` you can then select it using ::</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    import matplotlib</span></span><br><span class="line"><span class="string">    matplotlib.use(&quot;module://backend_wpfagg&quot;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> backend_bases</span><br><span class="line"><span class="keyword">from</span> matplotlib.backend_bases <span class="keyword">import</span> (</span><br><span class="line">    FigureManagerBase, MouseEvent, MouseButton, TimerBase)</span><br><span class="line"><span class="keyword">from</span> matplotlib.backends.backend_agg <span class="keyword">import</span> FigureCanvasAgg</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> System.Windows.Threading <span class="keyword">import</span> DispatcherTimer, DispatcherPriority</span><br><span class="line"><span class="keyword">from</span> System <span class="keyword">import</span> TimeSpan, EventHandler</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Matplotlib.Net <span class="keyword">import</span> NetMplAdapter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimerWpf</span>(<span class="title class_ inherited__">TimerBase</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, *args, **kwargs</span>):</span><br><span class="line">        self._timer = DispatcherTimer(DispatcherPriority.Render)</span><br><span class="line">        self._timer.Tick += EventHandler(self._on_tick)</span><br><span class="line">        <span class="built_in">super</span>().__init__(*args, **kwargs)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_timer_start</span>(<span class="params">self</span>):</span><br><span class="line">        self._timer.Stop()</span><br><span class="line">        self._timer.Start()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_timer_stop</span>(<span class="params">self</span>):</span><br><span class="line">        self._timer.Stop()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_timer_set_interval</span>(<span class="params">self</span>):</span><br><span class="line">        self._timer.Interval = TimeSpan.FromMilliseconds(self._interval)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_on_tick</span>(<span class="params">self, a, b</span>):</span><br><span class="line">        <span class="built_in">super</span>()._on_timer()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NavigationToolbar2WpfAgg</span>(backend_bases.NavigationToolbar2):</span><br><span class="line">    toolitems = [</span><br><span class="line">        (text, tooltip_text, image_file, name_of_method)</span><br><span class="line">        <span class="keyword">for</span> text, tooltip_text, image_file, name_of_method</span><br><span class="line">        <span class="keyword">in</span> (*backend_bases.NavigationToolbar2.toolitems,</span><br><span class="line">            (<span class="string">&#x27;Download&#x27;</span>, <span class="string">&#x27;Download plot&#x27;</span>, <span class="string">&#x27;filesave&#x27;</span>, <span class="string">&#x27;download&#x27;</span>))</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, canvas</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(canvas)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FigureManagerWpfAgg</span>(<span class="title class_ inherited__">FigureManagerBase</span>):</span><br><span class="line">    _toolbar2_class = NavigationToolbar2WpfAgg</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, canvas, num</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(canvas, num)</span><br><span class="line">        self._dotnet_manager = NetMplAdapter(self, canvas)</span><br><span class="line">        self.toolbar.pan()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle_resize</span>(<span class="params">self, w, h</span>):</span><br><span class="line">        fig = self.canvas.figure</span><br><span class="line">        fig.set_size_inches(w/fig.dpi, h/fig.dpi, forward=<span class="literal">False</span>)</span><br><span class="line">        <span class="keyword">from</span> matplotlib.backend_bases <span class="keyword">import</span> ResizeEvent</span><br><span class="line">        self.resize(*fig.bbox.size)</span><br><span class="line">        ResizeEvent(<span class="string">&#x27;resize_event&#x27;</span>, self.canvas)._process()</span><br><span class="line">        self.show()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> self._dotnet_manager <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self.canvas.draw_idle()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FigureCanvasWpf</span>(<span class="title class_ inherited__">FigureCanvasAgg</span>):</span><br><span class="line">    manager_class = FigureManagerWpfAgg</span><br><span class="line">    _timer_cls = TimerWpf</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">draw</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().draw()</span><br><span class="line">        buf = self.buffer_rgba()</span><br><span class="line">        w, h = self.get_width_height()</span><br><span class="line">        self.manager._dotnet_manager.Draw(buf, w, h)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle_wheel</span>(<span class="params">self, pos, delta</span>):</span><br><span class="line">        x, y = pos</span><br><span class="line">        actual_y = self.figure.bbox.height - y</span><br><span class="line">        MouseEvent(<span class="string">&#x27;scroll_event&#x27;</span>, self, x, actual_y, step=delta,</span><br><span class="line">                   )._process()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle_mouse_move</span>(<span class="params">self, pos</span>):</span><br><span class="line">        x, y = pos</span><br><span class="line">        actual_y = self.figure.bbox.height - y</span><br><span class="line">        MouseEvent(<span class="string">&quot;motion_notify_event&quot;</span>, self, x, actual_y)._process()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle_mouse_up</span>(<span class="params">self, pos, button</span>):</span><br><span class="line">        x, y = pos</span><br><span class="line">        actual_y = self.figure.bbox.height - y</span><br><span class="line">        MouseEvent(<span class="string">&quot;button_release_event&quot;</span>, self, x, actual_y, MouseButton.LEFT <span class="keyword">if</span> button == <span class="string">&quot;left&quot;</span> <span class="keyword">else</span> MouseButton.RIGHT)._process()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle_mouse_down</span>(<span class="params">self, pos, button</span>):</span><br><span class="line">        x, y = pos</span><br><span class="line">        actual_y = self.figure.bbox.height - y</span><br><span class="line">        MouseEvent(<span class="string">&quot;button_press_event&quot;</span>, self, x, actual_y, MouseButton.LEFT <span class="keyword">if</span> button == <span class="string">&quot;left&quot;</span> <span class="keyword">else</span> MouseButton.RIGHT)._process()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">FigureCanvas = FigureCanvasWpf</span><br><span class="line">FigureManager = FigureManagerWpfAgg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>appsettings.json</code>中的代码为，这里是我自己的，仅供参考：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Python&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;PythonHome&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\Users\\jym\\miniconda3\\envs\\dpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;PythonVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;38&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这里指定的python路径不能是python embed的，目前我也还不知道为什么，如果使用python embed的环境，会出现软件运行就结束的情况，没有任何报错，使用<code>try-catch</code>也捕获不到任何的异常，这里我使用的是<code>Miniconda</code>创建的虚拟环境，而且注意，python的版本要在<code>pythonnet</code>这个库的支持范围内。</p>
+<p>然后重点来了，这里在你自己的项目中直接运行可能会出现报错<code>找不到Matplotlib这个库</code>，但是请注意，这里的<code>Matploblib</code>非彼<code>matplotlib</code>，这里的<code>Matploblib</code>是<code>backend_wpfagg.py</code>中的这行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Matplotlib.Net <span class="keyword">import</span> NetMplAdapter</span><br></pre></td></tr></table></figure>
+<p>所以在这里，务必将这里的<code>Matplotlib.Net</code>修改成你自己的项目名称，否则这个错误根本找不到解决方法。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2024/01/27/%E7%BB%99NvChad%E9%85%8D%E7%BD%AE%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%8A%9F%E8%83%BD/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2024/07/22/WPF%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8pythonnet%E8%B0%83%E7%94%A8python%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%83%AD%E5%8A%9B%E5%9B%BE/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2024/07/22/WPF开发中使用pythonnet调用python代码实现热力图/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

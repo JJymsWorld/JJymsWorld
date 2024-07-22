@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>红黑树 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                            数据结构
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                红黑树
+            
+            
+        </div>
+        <span class="post-date">
+            11月 30, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>#红黑树概念与性质<br>时间复杂度: 插入O(log2n), 删除(O(log2n)), 查询(O(log2n)).<br>平衡二叉树(AVL): 平衡二叉树的插入与删除很容易破坏平衡特性，需要频繁调整，时间开销较大，适用于查询为主。<br>红黑树RBT: 插入与删除很多时候不会破坏红黑树的特性，即便需要调整，一般都可以在常数级时间内完成，适用于频繁插入与删除的场景。</p>
+<p>##特性</p>
+<ol>
+<li>红黑树是二叉排序树，满足二叉排序数的特点，<strong>左子树结点值≤根结点值≤右子树结点值</strong>。</li>
+<li>与普通BST相比：<ul>
+<li>每个结点或是红色的或是黑色的</li>
+<li>根结点是黑色的</li>
+<li>叶结点(也叫做外部结点，NULL节点，失败结点)均是黑色的</li>
+<li>不存在两个相邻的红色结点(即红结点的父亲结点与孩子结点均为黑色)</li>
+<li>对每个结点，从当前节点出发到任一叶节点的简单路径上，所含黑结点的数目相同。<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">RBNode</span>&#123;</span><br><span class="line">  <span class="type">int</span> key;</span><br><span class="line">  RBNode *parent;</span><br><span class="line">  RBNode *lchild;</span><br><span class="line">  RBnode *rchild;</span><br><span class="line">  <span class="type">int</span> color;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+背诵口诀: <strong>左根右，根叶黑，不红红，黑路同</strong></li>
+</ul>
+</li>
+<li>结点的黑高bh——从某节点出发不包含该节点到任一空叶结点的路径上黑色结点的个数。</li>
+<li><strong>性质</strong>：<ol>
+<li>从根节点到叶节点的最长路径不大于最短路径的2倍</li>
+<li>有n个内部结点的红黑树高度为h&lt;2log2(n+1)</li>
+</ol>
+</li>
+</ol>
+<p>#红黑树的查找，插入与删除</p>
+<h2 id="红黑树的查找"><a href="#红黑树的查找" class="headerlink" title="红黑树的查找"></a>红黑树的查找</h2><p>红黑树的查找与BST(二叉排序树),AVL(平衡二叉树)相同，从跟出发，左小右大，若查找到一个空叶结点，则查找失败。<br>##红黑树的插入</p>
+<ul>
+<li>先查找，确定插入位置(原理同二叉排序树)，插入新节点</li>
+<li>新结点时根——染为黑色</li>
+<li>新结点非跟——染为红色<ul>
+<li>若插入新结点后仍然满足红黑树定义，则插入结束</li>
+<li>若插入新结点后不满足红黑树定义，则需要调整，使其重新满足红黑树定义(如何调整？答：看新叔叔的脸色(hahahaha!))<ul>
+<li><strong>黑叔：旋转＋染色(旋转与平衡二叉树相同)</strong><ul>
+<li>LL型：右单旋，父换爷+染色(以插入结点的父节点为基准旋转)</li>
+<li>RR型：左单旋，父换爷+染色(同上)</li>
+<li>LR型：左、右双旋，儿换爷＋染色(先以插入结点为基准左旋在以旋转后的当前结点位置右旋)</li>
+<li>RL型：右、左双旋，儿换爷+染色(上述左右相反即可)</li>
+</ul>
+</li>
+<li><strong>红叔：染色＋变新</strong><ul>
+<li>叔父爷染色，爷变为新结点(变为新结点即从该插入部分第二句话开始考虑该结点即可。)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>根节点黑高为h的红黑树，内部结点数(关键字数量)至少有${r^h} - 1$个(总共有h层黑节点的满树形态)。</p>
+<h2 id="红黑树的删除"><a href="#红黑树的删除" class="headerlink" title="红黑树的删除"></a>红黑树的删除</h2><ol>
+<li>红黑树的删除结点的处理方式与二叉排序树的删除方式相同。</li>
+<li>删除结点之后，可能破坏红黑树的特性，此时需要调整使其再次满足红黑树的情况，调整方式与插入部分的调整方式相同。</li>
+</ol>
+<hr>
+<p>此文内容总结自王道考研数据结构课程，仅作个人笔记记录使用。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/12/02/KMP%E7%AE%97%E6%B3%95%E4%BB%A3%E7%A0%81/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/11/29/%E9%AB%98%E6%95%B0%E5%B8%B8%E7%94%A8%E5%B1%95%E5%BC%80%E5%BC%8F/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/11/30/%E7%BA%A2%E9%BB%91%E6%A0%91/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/11/30/红黑树/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

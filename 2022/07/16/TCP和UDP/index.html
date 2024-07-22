@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>TCP和UDP | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/">
+                            计算机图形学
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                TCP和UDP
+            
+            
+        </div>
+        <span class="post-date">
+            7月 16, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="TCP与UDP的区别"><a href="#TCP与UDP的区别" class="headerlink" title="TCP与UDP的区别"></a>TCP与UDP的区别</h2><ol>
+<li>TCP是面向连接的，UDP是无连接的</li>
+<li>TCP提供可靠传输，UDP提供不可靠传输</li>
+<li>TCP传输形式为字节流，UDP传输形式为数据报文段</li>
+<li>TCP传输效率慢，UDP传输效率快</li>
+<li>TCP所需资源多，UDP所需资源少</li>
+<li>TCP首部字节20-60，UDP为8个字节</li>
+</ol>
+<h2 id="TCP协议如何保证可靠传输"><a href="#TCP协议如何保证可靠传输" class="headerlink" title="TCP协议如何保证可靠传输"></a>TCP协议如何保证可靠传输</h2><ol>
+<li>应用数据被分割为TCP认为最适合发送的数据块</li>
+<li>TCP给发送的每个包进行编号，接受方对数据包进行排序，把有序的数据传送给应用层</li>
+<li>校验和：TCP计算首部的校验和。如果收到端的校验和有差错，TCP将丢弃这个报文段和不确认收到此报文段</li>
+<li>流量控制：TCP连接的每一方都有固定大小的缓冲空间。当接受方来不及处理发送方的数据，能提示发送方降低发送的速率，防止包丢失。采用可变大小的滑动窗口协议控制</li>
+<li>拥塞控制：当网络拥塞的时候，减少数据的发送</li>
+<li>ARQ协议：基本原理是没发送完一个分组就停止发送，等待对方确认。在收到确认之后再发送下一个分组</li>
+<li>超时重传：当TCP发出一个段之后，它启动一个定时器，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段</li>
+</ol>
+<h2 id="ARQ协议-Automatic-Repeat-reQuest"><a href="#ARQ协议-Automatic-Repeat-reQuest" class="headerlink" title="ARQ协议(Automatic Repeat-reQuest)"></a>ARQ协议(Automatic Repeat-reQuest)</h2><ol>
+<li><h3 id="停止等待ARQ"><a href="#停止等待ARQ" class="headerlink" title="停止等待ARQ"></a>停止等待ARQ</h3></li>
+</ol>
+<p>基本原理：每发完一个分组就停止发送，等待对方确认。如果过了一段时间(超时)，还是没有收到ACK确认，说明没有发送成功，需要重新发送，知道收到确认后再发送下一个分组。</p>
+<p>在停止等待协议中，若接收方收到重复分组，就丢弃该分组，但同时还要发送确认。</p>
+<ol start="2">
+<li><h2 id="连续ARQ协议"><a href="#连续ARQ协议" class="headerlink" title="连续ARQ协议"></a>连续ARQ协议</h2></li>
+</ol>
+<p>发送放维持一个发送窗口，位于发送窗口内的分组可以连续发送出去，儿不需要等待对方的确认。接受方一般采用累积确认，对按序达到的最后一个分组发送确认，表明到这个分组为止的所有分组都已经正确收到了。</p>
+<p>优缺点：</p>
+<ul>
+<li>优点：信道利用率高，容易实现，即使确认丢失，也不必重传。</li>
+<li>缺点：不能向发送方反映出接受方已经正确收到的所有分组信息。</li>
+</ul>
+<h2 id="滑动窗口和流量控制"><a href="#滑动窗口和流量控制" class="headerlink" title="滑动窗口和流量控制"></a>滑动窗口和流量控制</h2><p>TCP利用华东窗口实现流量控制。流量控制是为了控制发送放的发送速率，保证接受方来得及接受。接受方发送的确认报文中的窗口字段可以用来控制发送放窗口的大小。将窗口设置为0,则发送放无法发送数据。</p>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><p>拥塞控制是针对整个网络而言的，为了防止过多的数据注入到网络中，导致网络的性能变差。</p>
+<p>为了进行拥塞控制，发送发维持一个拥塞窗口(cwnd)。拥塞窗口的大小取决于网络的拥塞程度，并且动态变化。发送方让自己的发送窗口取值为拥塞窗口和接受方的接收窗口中较小的一个。</p>
+<p>主要有四种算法：</p>
+<ul>
+<li>慢开始：即由小到大逐渐增大拥塞窗口的值。cwnd初始值为1,没经过一个传播周期，cwnd加倍。</li>
+<li>拥塞避免：思路是让拥塞窗口cwnd的值缓慢增大，即每经过一个往返时间RTT就吧发送方的cwnd加一。</li>
+<li>快重传与快恢复(FRR)：不采用FRR，如果数据包丢失，TCP将会使用定时器来要求传输暂停。使用FRR，如果接收端接收到一个不按顺序的数据段，它会给发送端发送一个重复确认。如果发送端接受到三个重复确认，它会假定确认接受段指出的数据段丢失了，并立即重传这些丢失的数据段。</li>
+</ul>
+<p>拥塞控制过程：</p>
+<ol>
+<li>首先建立TCP连接之后，执行慢启动算法，当cwnd达到一定阈值时候，转为执行拥塞避免算法。</li>
+<li>若出现超时重传，则将慢启动阈值设置为<strong>原来的一半</strong>，重新开始执行上述算法</li>
+<li>若出现连续收到3个ACK，则将慢启动阈值设置为<strong>当前cwnd的一半</strong>，然后将当前cwnd设置为慢启动阈值，开始执行拥塞避免算法。</li>
+</ol>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/07/19/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%89%8D%E4%B8%AD%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E7%BB%9F%E4%B8%80%E7%89%88%E6%9C%AC%E8%BF%AD%E4%BB%A3%E5%86%99%E6%B3%95-%E4%BB%85%E7%A7%BB%E5%8A%A8%E5%B7%A6%E4%B8%AD%E5%8F%B3%E9%A1%BA%E5%BA%8F/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/16/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/16/TCP%E5%92%8CUDP/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/16/TCP和UDP/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>tmux配置文件 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/tmux/">
+                            tmux
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                tmux配置文件
+            
+            
+        </div>
+        <span class="post-date">
+            11月 13, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>全部拷贝然后粘贴到<code>~/.tmux.conf</code>文件中即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"># ------------------</span><br><span class="line"># URL: https://github.com/tao12345666333/dotfiles</span><br><span class="line"># Author: Jintao Zhang</span><br><span class="line"># Blog: https://moelove.info</span><br><span class="line"># Last update: 2021.03.25</span><br><span class="line"># ------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ------------------</span><br><span class="line"># Basic setting</span><br><span class="line"># ------------------</span><br><span class="line"></span><br><span class="line"># Because of copying text problems on macOS Sierra</span><br><span class="line"># run `brew install reattach-to-user-namespace`</span><br><span class="line"># and add following configurations</span><br><span class="line"># via https://github.com/tmux/tmux/issues/543</span><br><span class="line"># https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/issues/53</span><br><span class="line">set -g default-shell $SHELL</span><br><span class="line"># for macOS reattach-to-user-namespace</span><br><span class="line"># set -g default-command &quot;reattach-to-user-namespace -l $&#123;SHELL&#125;&quot;</span><br><span class="line"></span><br><span class="line">set -g default-terminal &#x27;screen-256color&#x27;</span><br><span class="line"># enable utf-8 </span><br><span class="line"># set -g status-utf8 on</span><br><span class="line"></span><br><span class="line">set -g history-limit 100000</span><br><span class="line"># use vi mode</span><br><span class="line">setw -g mode-keys vi</span><br><span class="line"></span><br><span class="line">set -g mouse on</span><br><span class="line"></span><br><span class="line">set-option -g display-time 5000</span><br><span class="line"></span><br><span class="line"># if the tmux&#x27;s version above version 1.7, you can use this option</span><br><span class="line">set-option -g renumber-windows on</span><br><span class="line"># if the tmux&#x27;s version bellow version 1.7, you can use this.</span><br><span class="line"># bind-key C-s run &quot;for i in $(tmux lsw|awk -F: &#x27;&#123;print $1&#125;&#x27;); do tmux movew -s \$i; done&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ------------------</span><br><span class="line"># Split window</span><br><span class="line"># ------------------</span><br><span class="line"># For tmux v1.9 the `default-path` option was removed. So we need `-c` option</span><br><span class="line"></span><br><span class="line">unbind-key c</span><br><span class="line">bind-key c new-window -c &#x27;#&#123;pane_current_path&#125;&#x27;</span><br><span class="line"> </span><br><span class="line">unbind-key &#x27;&quot;&#x27;</span><br><span class="line">bind-key &#x27;&quot;&#x27; split-window -v -c &#x27;#&#123;pane_current_path&#125;&#x27;</span><br><span class="line"> </span><br><span class="line">unbind-key %</span><br><span class="line">bind-key % split-window -h -c &#x27;#&#123;pane_current_path&#125;&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ------------------</span><br><span class="line"># Reload config</span><br><span class="line"># ------------------</span><br><span class="line"></span><br><span class="line">bind-key R source-file ~/.tmux.conf \; display-message &quot;Reload configuration..&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ------------------</span><br><span class="line"># Choose pane</span><br><span class="line"># ------------------</span><br><span class="line"></span><br><span class="line">unbind-key h</span><br><span class="line">bind-key h select-pane -L</span><br><span class="line"></span><br><span class="line">unbind-key j</span><br><span class="line">bind-key j select-pane -D</span><br><span class="line"></span><br><span class="line">unbind-key k</span><br><span class="line">bind-key k select-pane -U</span><br><span class="line"></span><br><span class="line">unbind-key l</span><br><span class="line">bind-key l select-pane -R</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ------------------</span><br><span class="line"># Resize pane</span><br><span class="line"># ------------------</span><br><span class="line"></span><br><span class="line">bind-key H resize-pane -L 6</span><br><span class="line">bind-key J resize-pane -D 6</span><br><span class="line">bind-key K resize-pane -U 6</span><br><span class="line">bind-key L resize-pane -R 6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ------------------</span><br><span class="line"># window title string</span><br><span class="line"># ------------------</span><br><span class="line">set -g set-titles-string &#x27;#T&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># -----------------</span><br><span class="line"># plugin</span><br><span class="line"># -----------------</span><br><span class="line">set -g @plugin &#x27;tmux-plugins/tpm&#x27;</span><br><span class="line">set -g @plugin &#x27;tmux-plugins/tmux-sensible&#x27;</span><br><span class="line">set -g set-clipboard on</span><br><span class="line">set -g @plugin &#x27;laktak/extrakto&#x27;</span><br><span class="line">set -g @plugin &#x27;tmux-plugins/tmux-yank&#x27;</span><br><span class="line">set -g @plugin &#x27;tmux-plugins/tmux-resurrect&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">run &#x27;~/.tmux/plugins/tpm/tpm&#x27;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># This tmux statusbar config was created by tmuxline.vim</span><br><span class="line"># https://github.com/edkolev/tmuxline.vim</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2023/11/22/linux%E4%B8%8B%E4%BD%BF%E7%94%A8bypy%E5%AE%9E%E7%8E%B0%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2023/11/08/ubuntu%E5%AE%89%E8%A3%85%E6%9C%80%E6%96%B0%E7%89%88neovim/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2023/11/13/tmux%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2023/11/13/tmux配置文件/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

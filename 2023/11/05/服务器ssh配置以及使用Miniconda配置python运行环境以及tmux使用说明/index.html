@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>服务器ssh配置以及使用Miniconda配置python运行环境以及tmux使用说明 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/python/">
+                            python
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/tmux/">
+                            tmux
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/ssh/">
+                            ssh
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                服务器ssh配置以及使用Miniconda配置python运行环境以及tmux使用说明
+            
+            
+        </div>
+        <span class="post-date">
+            11月 5, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="Vscode-ssh远程连接服务器"><a href="#Vscode-ssh远程连接服务器" class="headerlink" title="Vscode ssh远程连接服务器"></a>Vscode ssh远程连接服务器</h2><p>首先安装好vscode，去官网下载。<br>然后，如果习惯使用中文，去插件里搜索<code>chinese</code>，第一个下载安装即可。<br>然后去插件安装<code>Remote-SSH</code>这个插件，安装后左侧边栏会多出一项。<br><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/202311052113119.png"><br>然后选择远程资源管理器，鼠标放到ssh上面，点击右侧的设置按钮<br><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/202311052116080.png"><br>然后选择第一个进去，把config文件中的内容全选复制粘贴替换进去然后保存。<br>然后点击刷新按钮，下图所示。再展开SSH即可看到连接列表。<br><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/202311052118140.png"><br>点击箭头或者后面那个都可以，箭头是在本窗口打开，另一个是再打开一个新的窗口连接。<br><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/202311052120302.png"><br>然后选择linux，输入密码即可，可能有些机器需要输入两遍。</p>
+<h2 id="Miniconda环境安装"><a href="#Miniconda环境安装" class="headerlink" title="Miniconda环境安装"></a>Miniconda环境安装</h2><p>首先去<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/?C=M&O=D">清华原官方</a>,找到你要安装的Miniconda版本，一般安装最新的即可，服务器是ubuntu系统，所以看清楚，找到linux x86_64的版本进行复制。<br><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/202311052124345.png"><br>然后鼠标放上去点击右键然后复制连接。<br>然后连接上远程服务器，打开终端，在终端输入命令把安装文件下载到本地:  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-py311_23.9.0-0-Linux-x86_64.sh </span><br><span class="line"><span class="comment"># wget后面的地址就是你复制的地址</span></span><br></pre></td></tr></table></figure>
+<p>然后输入指令修改文件执行权限:  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> u+x Miniconda3-py311_23.9.0-0-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>最后执行安装文件进行安装:  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./Miniconda3-py311_23.9.0-0-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>然后根据提示进行安装，许可证那里可以按几次空格跳过，中间让按回车就按回车，让输入yes就输入yes。<br>安装完毕后，关掉终端，然后重新打开一下终端。<br>测试能够正常执行<code>conda</code>指令，即为安装成功。<br>然后如果需要创建新的python环境，可以使用指令: </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conda create -n abc python==3.8</span><br><span class="line"><span class="comment">#上面指令中的abc是你要创建的新的环境的名称</span></span><br><span class="line"><span class="comment">#然后后面可以通过</span></span><br><span class="line">conda activate abc</span><br><span class="line"><span class="comment">#来激活abc环境</span></span><br><span class="line"></span><br><span class="line">conda deactivate</span><br><span class="line"><span class="comment">#取消激活环境，返回上一个环境</span></span><br></pre></td></tr></table></figure>
+<p>conda的具体指令自行去百度学习，学习之后再进行操作，本着节省空间，减少冗余依赖包的原则，先学习好conda的使用，以及conda和pip包管理的区别，再进行使用。  </p>
+<h2 id="tmux使用教程"><a href="#tmux使用教程" class="headerlink" title="tmux使用教程"></a>tmux使用教程</h2><p>简单来说就是，当我们连接上远程服务器之后，我们的会话一旦关闭，那么会话中运行的程序也将会关闭，通常我们进行模型的训练会需要比较长的时间，如果使用原始的方法，我们在服务器上跑程序的同时，也比需保持我们的电脑与服务器的连接，那么更为高级的方法就是我们通过tmux管理会话，当我们一个程序需要跑很久的时候，我们可以不关闭会话，而是detach会话，然后在一段之间之后我们可以重连回会话，并且在detach这段时间，我们的退出并不影响远程服务器上面代码的执行。    </p>
+<p>目前服务器上面tmux均已安装好，直接就可以使用，不需要自行安装。  </p>
+<p>更为详细的使用方法可以参考<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/10/tmux.html">阮一峰的教程</a>，我这里只进行简单日常的使用的演示。  </p>
+<p>tmux的使用是在服务器上面的，所以我们首先需要连接上远程终端。<br>然后我们可以通过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmux new -s abc</span><br><span class="line"><span class="comment">#abc为需要建立会话的名称，后续detach之后需要通过这个名称来进行重连，自己记好</span></span><br></pre></td></tr></table></figure>
+<p>这时候我们已经进入tmux新建的会话中<br><img src="https://cdn.jsdelivr.net/gh/JJymsWorld/Jymscloudiimmgg@main/img/202311052152555.png">  </p>
+<p>到会话内部的使用，跟外部没什么区别，你可以把它看作就是一个普通的终端，可以通过<code>python test.py</code>来执行python文件等等。  </p>
+<p>当我们需要执行一个比较久的文件时，我们可以现在tmux创建的会话中运行程序，然后输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux detach</span><br></pre></td></tr></table></figure>
+<p>来detach当前会话，然后这时候你就会退出tmux会话，此时你可以关闭ssh连接，甚至是自己的电脑，然后去睡一觉，醒了之后，再次连接上ssh，然后通过指令:  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmux attach -t abc</span><br><span class="line"><span class="comment">#abc是会话名称</span></span><br></pre></td></tr></table></figure>
+<p>即可重连回去，这时候就可以看运行结果咯。<br>当然，如果你忘了你创建过多少会话，以及会话的名字，你可以通过指令:  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+<p>来查看已经创建的会话，以及对应的会话名称。<br>其他更多指令，以及快捷键直接去参考阮一峰的教程。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2023/11/08/ubuntu%E5%AE%89%E8%A3%85%E6%9C%80%E6%96%B0%E7%89%88neovim/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2023/10/07/spacevim%E7%9A%84autoload%E8%AE%BE%E7%BD%AE%E4%BB%A5%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2023/11/05/%E6%9C%8D%E5%8A%A1%E5%99%A8ssh%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8Miniconda%E9%85%8D%E7%BD%AEpython%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83%E4%BB%A5%E5%8F%8Atmux%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2023/11/05/服务器ssh配置以及使用Miniconda配置python运行环境以及tmux使用说明/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

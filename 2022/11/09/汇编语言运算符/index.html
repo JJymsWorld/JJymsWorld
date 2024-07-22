@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>汇编语言运算符 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/%E6%B1%87%E7%BC%96/">
+                            汇编
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                汇编语言运算符
+            
+            
+        </div>
+        <span class="post-date">
+            11月 9, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="运算符伪指令"><a href="#运算符伪指令" class="headerlink" title="运算符伪指令"></a>运算符伪指令</h2><h4 id="常数"><a href="#常数" class="headerlink" title="常数"></a>常数</h4><ol>
+<li>二进制常数：以字母B为结尾</li>
+<li>八进制常数：以字母Q为结尾</li>
+<li>十进制常数：以字母D为结尾(可省略)</li>
+<li>十六进制常数：以字母H为结尾</li>
+<li>字符串常数：以ASCII码形式存放</li>
+</ol>
+<h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><ol>
+<li>+：加</li>
+<li>-：减</li>
+<li>*：乘</li>
+<li>&#x2F;：除，取整</li>
+<li>MOD：模除、取余</li>
+<li>SHL：左移</li>
+<li>SHR：右移</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV AL, 16 MOD 5 ;(AL)=1</span><br><span class="line">MOV AL, 10100100B SHR 2 ;(AL)=00101001B</span><br></pre></td></tr></table></figure>
+
+<h4 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h4><ol>
+<li>AND：与</li>
+<li>OR：或</li>
+<li>NOT：非</li>
+<li>XOR：异或</li>
+</ol>
+<blockquote>
+<p>用于数值表达式中对数值进行按位逻辑运算，结果为8、16或32位二进制数</p>
+<p><strong>注意区分与逻辑运算执行的区别！！！：逻辑运算符在汇编的时候就由汇编程序完成逻辑运算了，而逻辑指令则是在指令执行的时候完成</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">;(DL)=10110100B</span><br><span class="line">OR DL, NOT 7EH ;其中NOT是逻辑运算符在编译的时候数值已经确定为81H，OR是逻辑运算指令，在执行的时候计算81H与DL寄存器中的数据作或运算，相当于执行指令时候执行下面指令</span><br><span class="line">OR DL, 81H</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h4><ol>
+<li>EQ：等于</li>
+<li>NE：不等于</li>
+<li>LT：小于</li>
+<li>GT：大于</li>
+<li>GE：大于等于</li>
+<li>LE：小于等于</li>
+</ol>
+<blockquote>
+<p>参与关系运算的必须是两个数值，若关系成立，则结果为真(0FFFFH)，否则结果为假(0000H)</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MOV AX, ((12 LT 8) AND 5) OR ((20 GE 9) AND 7)</span><br><span class="line"></span><br><span class="line">;上式相当于</span><br><span class="line">;(12 LT 8)=0000H, (12 LT 8) AND 5=0</span><br><span class="line">;(20 GE 9)=0FFFFH, (20 GE 9) AND 7=7</span><br><span class="line">;AX=0007H</span><br></pre></td></tr></table></figure>
+
+<h4 id="分析运算符"><a href="#分析运算符" class="headerlink" title="分析运算符"></a>分析运算符</h4><p><code>SEG</code>，<code>OFFSET</code>，<code>TYPE</code>加在变量名或标号名的前面</p>
+<ol>
+<li>SEG：得到变量名或者标号名的段基址</li>
+<li>OFFSET：得到变量名或者标号名的偏移量</li>
+<li>TYPE：在变量名前面，返回值为1(字节)，2(字)，4(双子)，-1(NEAR)，-2(FAR)</li>
+<li>LENGTH：用在变量名前面，对与变量使用DUP进行定义的情况，汇编程序将回送分配给该变量的单元数。对于其他情况则送回1.</li>
+<li>SIZE：用在变量名前面，汇编程序将送回分配给该变量的字节数，值为LENGTH与TYPE的乘积。</li>
+</ol>
+<h4 id="属性说明伪指令"><a href="#属性说明伪指令" class="headerlink" title="属性说明伪指令"></a>属性说明伪指令</h4><ol>
+<li>PTR操作符</li>
+</ol>
+<p>格式：<code>类型  PTR  地址表达式</code></p>
+<p>功能：确定地址表达式的存储单元为指定的类型(类似与强制类型转换)，即用在地址表达式前面，用于指定或临时改变变量名和标号名的类型</p>
+<p>分类：<code>BYTE</code>，<code>WORD</code>，<code>DWORD</code>，<code>NEAR</code>，<code>FAR</code>等</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ADD WORD PTR [SI], 20 ;存储器操作类型为字</span><br><span class="line">JMP FAR PTR OK ;OK是可以进行段间转移的符号</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>THIS操作符</li>
+</ol>
+<p>格式： <code>THIS  类型</code></p>
+<p>功能：返回一个具有指定类型的存储器操作数。返回的存储器操作数的段基地址和偏移址就是下一个将要分配的存储单元的段基址和偏移地址。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MY_WORD EQU THIS WORD ;MY_WORD是一个字变量，他的段基址和偏移地址与字节变量MY_BYTE相同</span><br><span class="line">MY_BYTE DB ?</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>SHORT(短转移说明)</li>
+</ol>
+<p>格式： <code>JMP SHORT PTR  目标地址</code></p>
+<p>功能： 转移的目标地址等于当前IP的内容加上8位的位移量，转移的目标地址距离本条指令的下一条指令之间的偏移量范围为-128~127</p>
+<ol start="4">
+<li>LABEL伪指令</li>
+</ol>
+<p>格式： <code>变量号/标号  LABEL [类型]</code></p>
+<p>功能：通常和下一个语句所定义的变量和标号联用，给下一个语句所定义的变量和标号取别名。别名由LABEL左边的名称决定，而其类型属性或距离属性则由LABEL右边的参数来给定。</p>
+<p>分类：</p>
+<ul>
+<li>与变量连用(改变其类型属性)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TIMB LABEL BYTE ;为TIMW取别名TIMB，并修改类型为字节型</span><br><span class="line">TIMW DW 1234H, 5678H</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">MOV AX, TIMW[0] ;(AX)=1234H</span><br><span class="line">MOV BL, TIMB[0] ;(BX)=34H</span><br></pre></td></tr></table></figure>
+
+<pre><code>定义堆栈段也经常使用LABEL语句：
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ASTACK SEGMENT</span><br><span class="line">  DW 20 DUP (?)</span><br><span class="line">  TOP LABEL WORD</span><br><span class="line">ASTACK ENDS ;这里定义了一个由20字组成的堆栈，其栈底名称取名为TOP，类型定义为字</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>与标号连用(改变其距离属性)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SUBF LABEL FAR</span><br><span class="line">SUBN:MOV AX,[BX+SI];隐式定义了SUBN的距离属性为NEAR,前面为SUBN去了一个别名SUBF，属性为FAR。</span><br><span class="line">;SUBF和SUBN有着相同的逻辑地址，但他们的距离属性不同，可作为程序转移或调用时不同情况的入口，当段内转移或段间转移，调用不</span><br><span class="line">;同标号名称，实际上是指向同一条指令 </span><br></pre></td></tr></table></figure>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/11/10/%E6%B1%87%E7%BC%96%E6%A0%87%E5%BF%97%E4%BD%8D%E6%93%8D%E4%BD%9C%E6%8C%87%E4%BB%A4/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/11/09/%E6%B1%87%E7%BC%96%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E5%8F%8A%E4%BC%AA%E6%8C%87%E4%BB%A4/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/11/09/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%BF%90%E7%AE%97%E7%AC%A6/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/11/09/汇编语言运算符/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

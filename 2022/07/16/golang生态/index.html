@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>golang生态 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/Golang/">
+                            Golang
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                golang生态
+            
+            
+        </div>
+        <span class="post-date">
+            7月 16, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h1 id="Web框架"><a href="#Web框架" class="headerlink" title="Web框架"></a>Web框架</h1><h2 id="beego"><a href="#beego" class="headerlink" title="beego"></a>beego</h2><p><a target="_blank" rel="noopener" href="https://github.com/astaxie/beego">beego</a></p>
+<h2 id="gin"><a href="#gin" class="headerlink" title="gin"></a>gin</h2><p><a target="_blank" rel="noopener" href="https://github.com/gin-gonic/gin">gin</a></p>
+<h2 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h2><p><a target="_blank" rel="noopener" href="https://github.com/labstack/echo">echo</a></p>
+<h2 id="Iris"><a href="#Iris" class="headerlink" title="Iris"></a>Iris</h2><p><a target="_blank" rel="noopener" href="https://github.com/kataras/iris">iris</a></p>
+<h1 id="微服务框架"><a href="#微服务框架" class="headerlink" title="微服务框架"></a>微服务框架</h1><h2 id="go-kit"><a href="#go-kit" class="headerlink" title="go kit"></a>go kit</h2><p><a target="_blank" rel="noopener" href="http://gokit.io/">go kit</a></p>
+<h2 id="Istio"><a href="#Istio" class="headerlink" title="Istio"></a>Istio</h2><p><a target="_blank" rel="noopener" href="https://istio.io/">istio</a></p>
+<h1 id="容器编排"><a href="#容器编排" class="headerlink" title="容器编排"></a>容器编排</h1><h2 id="Kubernetes"><a href="#Kubernetes" class="headerlink" title="Kubernetes"></a>Kubernetes</h2><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">Kubernetes</a></p>
+<h2 id="swarm"><a href="#swarm" class="headerlink" title="swarm"></a>swarm</h2><p><a target="_blank" rel="noopener" href="https://github.com/docker/classicswarm">swarm</a></p>
+<h1 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h1><h2 id="consul"><a href="#consul" class="headerlink" title="consul"></a>consul</h2><p><a target="_blank" rel="noopener" href="https://github.com/hashicorp/consul">consul</a></p>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><h2 id="K-V存储"><a href="#K-V存储" class="headerlink" title="K&#x2F;V存储"></a>K&#x2F;V存储</h2><p><a target="_blank" rel="noopener" href="https://github.com/coreos/etcd">etcd</a></p>
+<h2 id="分布式存储"><a href="#分布式存储" class="headerlink" title="分布式存储"></a>分布式存储</h2><p><a target="_blank" rel="noopener" href="https://github.com/pingcap/tidb">tidb</a></p>
+<h1 id="静态建站"><a href="#静态建站" class="headerlink" title="静态建站"></a>静态建站</h1><h2 id="hugo"><a href="#hugo" class="headerlink" title="hugo"></a>hugo</h2><p><a target="_blank" rel="noopener" href="https://github.com/gohugoio/hugo">hugo</a></p>
+<h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p><a target="_blank" rel="noopener" href="https://github.com/nsqio/nsq">nsq</a></p>
+<h2 id="TCP长链接框架-轻量级服务器"><a href="#TCP长链接框架-轻量级服务器" class="headerlink" title="TCP长链接框架(轻量级服务器)"></a>TCP长链接框架(轻量级服务器)</h2><p><a target="_blank" rel="noopener" href="https://github.com/aceld/zinx">zinx</a></p>
+<h2 id="Leaf-游戏服务器"><a href="#Leaf-游戏服务器" class="headerlink" title="Leaf(游戏服务器)"></a>Leaf(游戏服务器)</h2><p><a target="_blank" rel="noopener" href="https://github.com/name5566/leaf">leaf</a></p>
+<h2 id="RPC框架"><a href="#RPC框架" class="headerlink" title="RPC框架"></a>RPC框架</h2><p><a target="_blank" rel="noopener" href="https://groc.io/">gRPC</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go">gRPC-go</a></p>
+<h2 id="redis集群"><a href="#redis集群" class="headerlink" title="redis集群"></a>redis集群</h2><p><a target="_blank" rel="noopener" href="https://github.com/CodisLabs/codis">codis</a></p>
+<h1 id="爬虫框架"><a href="#爬虫框架" class="headerlink" title="爬虫框架"></a>爬虫框架</h1><h2 id="go-query"><a href="#go-query" class="headerlink" title="go query"></a>go query</h2><p><a target="_blank" rel="noopener" href="https://github.com/PuerkitoBio/goquery">go query</a></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/07/16/GoModules%E4%BD%BF%E7%94%A8/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/16/C-%E4%B8%ADstruct%E4%B8%8Eclass%E7%9A%84%E5%8C%BA%E5%88%AB/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/16/golang%E7%94%9F%E6%80%81/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/16/golang生态/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>

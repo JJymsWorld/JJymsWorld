@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>Nodejs中http模块使用代理请求 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/NodeJs/">
+                            NodeJs
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Nodejs中http模块使用代理请求
+            
+            
+        </div>
+        <span class="post-date">
+            7月 16, 2022
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>代码示例: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&quot;http&quot;</span>);  <span class="comment">// 引入内置http模块</span></span><br><span class="line"><span class="keyword">const</span> url  = <span class="built_in">require</span>(<span class="string">&quot;url&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 要访问的目标页面</span></span><br><span class="line"><span class="keyword">const</span> targetUrl = <span class="string">&quot;http://dev.kdlapi.com/testproxy&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> urlParsed   = url.<span class="title function_">parse</span>(targetUrl);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 代理ip,由快代理提供</span></span><br><span class="line"><span class="keyword">const</span> proxyIp = <span class="string">&quot;47.115.36.94&quot;</span>;  <span class="comment">// 代理服务器ip</span></span><br><span class="line"><span class="keyword">const</span> proxyPort = <span class="string">&quot;16816&quot;</span>; <span class="comment">// 代理服务器host</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// http代理验证信息</span></span><br><span class="line"><span class="keyword">const</span> options = &#123;</span><br><span class="line">    host    : proxyIp,</span><br><span class="line">    port    : proxyPort,</span><br><span class="line">    path    : targetUrl,</span><br><span class="line">    method  : <span class="string">&quot;GET&quot;</span>,</span><br><span class="line">    headers : &#123;</span><br><span class="line">        <span class="string">&quot;Host&quot;</span>                : urlParsed.<span class="property">hostname</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">http.<span class="title function_">request</span>(options,  <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;got response: &quot;</span> + res.<span class="property">statusCode</span>);</span><br><span class="line">        <span class="comment">// 输出返回内容(使用了gzip压缩)</span></span><br><span class="line">        <span class="keyword">if</span> (res.<span class="property">headers</span>[<span class="string">&#x27;content-encoding&#x27;</span>] &amp;&amp; res.<span class="property">headers</span>[<span class="string">&#x27;content-encoding&#x27;</span>].<span class="title function_">indexOf</span>(<span class="string">&#x27;gzip&#x27;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> zlib = <span class="built_in">require</span>(<span class="string">&#x27;zlib&#x27;</span>);</span><br><span class="line">            <span class="keyword">let</span> unzip = zlib.<span class="title function_">createGunzip</span>();</span><br><span class="line">            res.<span class="title function_">pipe</span>(unzip).<span class="title function_">pipe</span>(process.<span class="property">stdout</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 输出返回内容(未使用gzip压缩)</span></span><br><span class="line">            res.<span class="title function_">pipe</span>(process.<span class="property">stdout</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">on</span>(<span class="string">&quot;error&quot;</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">end</span>()</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>https的要复杂一些:</p>
+<p>首先创建HttpsProxyAgent.js文件,写入以下代码.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Util</span> = <span class="built_in">require</span>(<span class="string">&#x27;util&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Https</span> = <span class="built_in">require</span>(<span class="string">&#x27;https&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Tls</span> = <span class="built_in">require</span>(<span class="string">&#x27;tls&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * HTTPS Agent for node.js HTTPS requests via a proxy.</span></span><br><span class="line"><span class="comment"> * blog.vanamco.com/connecting-via-proxy-node-js/</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">HttpsProxyAgent</span>(<span class="params">options</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="title class_">Https</span>.<span class="property">Agent</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>, options);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">proxyHost</span> = options.<span class="property">proxyHost</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">proxyPort</span> = options.<span class="property">proxyPort</span>;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">createConnection</span> = <span class="keyword">function</span>(<span class="params">opts, callback</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// do a CONNECT request</span></span><br><span class="line">        <span class="keyword">var</span> req = <span class="title class_">Http</span>.<span class="title function_">request</span>(&#123;</span><br><span class="line">            <span class="attr">host</span>: options.<span class="property">proxyHost</span>,</span><br><span class="line">            <span class="attr">port</span>: options.<span class="property">proxyPort</span>,</span><br><span class="line">            <span class="attr">method</span>: <span class="string">&#x27;CONNECT&#x27;</span>,</span><br><span class="line">            <span class="attr">path</span>: opts.<span class="property">host</span> + <span class="string">&#x27;:&#x27;</span> + opts.<span class="property">port</span>,</span><br><span class="line">            <span class="attr">headers</span>: &#123;</span><br><span class="line">                <span class="attr">host</span>: opts.<span class="property">host</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        req.<span class="title function_">on</span>(<span class="string">&#x27;connect&#x27;</span>, <span class="keyword">function</span>(<span class="params">res, socket, head</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> cts = <span class="title class_">Tls</span>.<span class="title function_">connect</span>(</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">host</span>: opts.<span class="property">host</span>,</span><br><span class="line">                    <span class="attr">socket</span>: socket</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="keyword">function</span>(<span class="params"></span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="title function_">callback</span>(<span class="literal">false</span>, cts);</span><br><span class="line">                &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        req.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="keyword">function</span>(<span class="params">err</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="title function_">callback</span>(err, <span class="literal">null</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        req.<span class="title function_">end</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Util</span>.<span class="title function_">inherits</span>(<span class="title class_">HttpsProxyAgent</span>, <span class="title class_">Https</span>.<span class="property">Agent</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Almost verbatim copy of http.Agent.addRequest</span></span><br><span class="line"><span class="comment">// HttpsProxyAgent.prototype.addRequest = function(req, host, port, localAddress) // node v0.10.x</span></span><br><span class="line"><span class="title class_">HttpsProxyAgent</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">addRequest</span> = <span class="keyword">function</span>(<span class="params">req, options</span>)   <span class="comment">// node v0.12.x</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* node v0.10.x</span></span><br><span class="line"><span class="comment">    var name = host + &#x27;:&#x27; + port;</span></span><br><span class="line"><span class="comment">    if (localAddress)</span></span><br><span class="line"><span class="comment">        name += &#x27;:&#x27; + localAddress;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">var</span> name = options.<span class="property">host</span> + <span class="string">&#x27;:&#x27;</span> + options.<span class="property">port</span>;</span><br><span class="line">    <span class="keyword">if</span> (options.<span class="property">path</span>)</span><br><span class="line">        name += <span class="string">&#x27;:&#x27;</span> + options.<span class="property">path</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">sockets</span>[name])</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">sockets</span>[name] = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">sockets</span>[name].<span class="property">length</span> &lt; <span class="variable language_">this</span>.<span class="property">maxSockets</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// if we are under maxSockets create a new one.</span></span><br><span class="line">        <span class="comment">// this.createSocket(name, host, port, localAddress, req, function(socket)  // node 0.10.x</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">createSocket</span>(name, options.<span class="property">host</span>, options.<span class="property">port</span>, options.<span class="property">path</span>, req, <span class="keyword">function</span>(<span class="params">socket: Net.Socket</span>) <span class="comment">// node 0.12.x</span></span><br><span class="line">        &#123;</span><br><span class="line">            req.<span class="title function_">onSocket</span>(socket);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// we are over limit so we&#x27;ll add it to the queue.</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">requests</span>[name])</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">requests</span>[name] = [];</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">requests</span>[name].<span class="title function_">push</span>(req);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Almost verbatim copy of http.Agent.createSocket</span></span><br><span class="line"><span class="title class_">HttpsProxyAgent</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">createSocket</span> = <span class="keyword">function</span>(<span class="params">name, host, port, localAddress, req, callback</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> self = <span class="variable language_">this</span>;</span><br><span class="line">    <span class="keyword">var</span> options = <span class="title class_">Util</span>.<span class="title function_">_extend</span>(&#123;&#125;, self.<span class="property">options</span>);</span><br><span class="line">    options.<span class="property">port</span> = port;</span><br><span class="line">    options.<span class="property">host</span> = host;</span><br><span class="line">    options.<span class="property">localAddress</span> = localAddress;</span><br><span class="line"></span><br><span class="line">    options.<span class="property">servername</span> = host;</span><br><span class="line">    <span class="keyword">if</span> (req)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> hostHeader = req.<span class="title function_">getHeader</span>(<span class="string">&#x27;host&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (hostHeader)</span><br><span class="line">            options.<span class="property">servername</span> = hostHeader.<span class="title function_">replace</span>(<span class="regexp">/:.*$/</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    self.<span class="title function_">createConnection</span>(options, <span class="keyword">function</span>(<span class="params">err, s</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (err)</span><br><span class="line">        &#123;</span><br><span class="line">            err.<span class="property">message</span> += <span class="string">&#x27; while connecting to HTTP(S) proxy server &#x27;</span> + self.<span class="property">proxyHost</span> + <span class="string">&#x27;:&#x27;</span> + self.<span class="property">proxyPort</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (req)</span><br><span class="line">                req.<span class="title function_">emit</span>(<span class="string">&#x27;error&#x27;</span>, err);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">throw</span> err;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!self.<span class="property">sockets</span>[name])</span><br><span class="line">            self.<span class="property">sockets</span>[name] = [];</span><br><span class="line"></span><br><span class="line">        self.<span class="property">sockets</span>[name].<span class="title function_">push</span>(s);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> onFree = <span class="keyword">function</span>(<span class="params"></span>)</span><br><span class="line">        &#123;</span><br><span class="line">            self.<span class="title function_">emit</span>(<span class="string">&#x27;free&#x27;</span>, s, host, port, localAddress);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> onClose = <span class="keyword">function</span>(<span class="params">err</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// this is the only place where sockets get removed from the Agent.</span></span><br><span class="line">            <span class="comment">// if you want to remove a socket from the pool, just close it.</span></span><br><span class="line">            <span class="comment">// all socket errors end in a close event anyway.</span></span><br><span class="line">            self.<span class="title function_">removeSocket</span>(s, name, host, port, localAddress);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> onRemove = <span class="keyword">function</span>(<span class="params"></span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// we need this function for cases like HTTP &#x27;upgrade&#x27;</span></span><br><span class="line">            <span class="comment">// (defined by WebSockets) where we need to remove a socket from the pool</span></span><br><span class="line">            <span class="comment">// because it&#x27;ll be locked up indefinitely</span></span><br><span class="line">            self.<span class="title function_">removeSocket</span>(s, name, host, port, localAddress);</span><br><span class="line">            s.<span class="title function_">removeListener</span>(<span class="string">&#x27;close&#x27;</span>, onClose);</span><br><span class="line">            s.<span class="title function_">removeListener</span>(<span class="string">&#x27;free&#x27;</span>, onFree);</span><br><span class="line">            s.<span class="title function_">removeListener</span>(<span class="string">&#x27;agentRemove&#x27;</span>, onRemove);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        s.<span class="title function_">on</span>(<span class="string">&#x27;free&#x27;</span>, onFree);</span><br><span class="line">        s.<span class="title function_">on</span>(<span class="string">&#x27;close&#x27;</span>, onClose);</span><br><span class="line">        s.<span class="title function_">on</span>(<span class="string">&#x27;agentRemove&#x27;</span>, onRemove);</span><br><span class="line"></span><br><span class="line">        <span class="title function_">callback</span>(s);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>接着https代理请求示例:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">HttpsProxyAgent</span> = <span class="built_in">require</span>(<span class="string">&quot;./HttpsProxyAgent&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Https</span> = <span class="built_in">require</span>(<span class="string">&#x27;https&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> agent = <span class="keyword">new</span> <span class="title class_">HttpsProxyAgent</span>(&#123;</span><br><span class="line">    <span class="attr">proxyHost</span>: <span class="string">&#x27;210.42.41.8&#x27;</span>,</span><br><span class="line">    <span class="attr">proxyPort</span>: <span class="number">8090</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Https</span>.<span class="title function_">request</span>(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">host</span>: <span class="string">&#x27;github.com&#x27;</span>,</span><br><span class="line">        <span class="attr">port</span>: <span class="number">443</span>,</span><br><span class="line">        <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span>,</span><br><span class="line">        <span class="attr">path</span>: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">        <span class="attr">agent</span>: agent</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">function</span>(<span class="params">res</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        res.<span class="title function_">on</span>(<span class="string">&#x27;data&#x27;</span>, <span class="keyword">function</span>(<span class="params">data</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(data.<span class="title function_">toString</span>());</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">).<span class="title function_">end</span>();</span><br></pre></td></tr></table></figure>
+
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2022/07/16/nvm%E5%88%87%E6%8D%A2%E5%9B%BD%E5%86%85%E6%BA%90/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2022/07/16/CAS%E6%8A%80%E6%9C%AF-CompareAndSwap/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2022/07/16/Nodejs%E4%B8%ADhttp%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AF%B7%E6%B1%82/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2022/07/16/Nodejs中http模块使用代理请求/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>
