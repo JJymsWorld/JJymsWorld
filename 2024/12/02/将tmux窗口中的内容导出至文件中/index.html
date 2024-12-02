@@ -14,7 +14,7 @@
 
 
 
-<title>Tag: vscode | YiMing</title>
+<title>将tmux窗口中的内容导出至文件中 | YiMing</title>
 
 
 
@@ -118,45 +118,102 @@
 
       <div class="main">
         <div class="flex-container">
-          <div id="tag">
+          <article id="post">
+
   
-
-    <p class="tag-title">
-      / <a href="/jjymsworld/tag/">tags</a>
-      / <a href="">vscode</a> /
-    </p>
-    <div class="post-list">
-    
-    
-
-        
-
-        
-            <div class="year-title">2022</div>
-        
-
-        <div class="post-list-item">
-            <div class="post-title">
-            <a href="/jjymsworld/2022/11/26/Vscode%E8%AE%BE%E7%BD%AEtab%E9%94%AE%E5%BE%AA%E7%8E%AF%E4%BB%A3%E7%A0%81%E8%A1%A5%E5%85%A8%E6%8F%90%E7%A4%BA/">
-                
-                    Vscode设置tab键循环代码补全提示
-                
-                </a> 
-            </div>
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
             
-            <span class="post-date">11月 26, 2022</span>
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/tmux/">
+                            tmux
+                        </a>
+                    </span>    
+                           
+            
         </div>
-
-    
-    <div id="paginator">
+        <div class="post-title">
+            
+            
+                将tmux窗口中的内容导出至文件中
+            
+            
+        </div>
+        <span class="post-date">
+            12月 2, 2024
+        </span>
+    </div>
+    <div class="post-img">
         
+            <div class="h-line-primary"></div>
+              
     </div>
 </div>
+    <div class="post-content">
+    <ol>
+<li>进入指定的tmux会话<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux attach -t xxx</span><br></pre></td></tr></table></figure></li>
+<li>将当前窗口的内容补货到一个缓冲区中<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux capture-pane -S -32768</span><br></pre></td></tr></table></figure></li>
+<li>将缓冲区的内容保存到文件中<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux save-buffer &lt;file_path&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
 
+</div> 
 
-  
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2024/07/22/windows10%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E8%A7%A3%E5%86%B3%E7%AD%BE%E5%90%8D%E9%97%AE%E9%A2%98/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2024/12/02/%E5%B0%86tmux%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AF%BC%E5%87%BA%E8%87%B3%E6%96%87%E4%BB%B6%E4%B8%AD/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2024/12/02/将tmux窗口中的内容导出至文件中/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
 
 </div>
+     
+  
+</article>
         </div>
       </div>
       
