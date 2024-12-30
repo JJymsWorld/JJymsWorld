@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>新版NvChad安装配置指南(Jaq代码执行和平滑滚动插件以及快捷终端执行当前文件) | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/neovim/">
+                            neovim
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/nvchad/">
+                            nvchad
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                新版NvChad安装配置指南(Jaq代码执行和平滑滚动插件以及快捷终端执行当前文件)
+            
+            
+        </div>
+        <span class="post-date">
+            3月 12, 2024
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>我是在ubuntu安装这里就以linux为例，其他操作系统参考官方英文文档(注意是英文文档，中文文档更新比较慢)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/NvChad/starter ~/.config/nvim &amp;&amp; nvim</span><br></pre></td></tr></table></figure>
+<p>注意：插件的安装都是从GitHub上面拉取的，建议使用科学上网</p>
+<h2 id="卸载方法"><a href="#卸载方法" class="headerlink" title="卸载方法"></a>卸载方法</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Linux / Macos (unix)</span> </span><br><span class="line">rm -rf ~/.config/nvim </span><br><span class="line">rm -rf ~/.local/share/nvim </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Windows CMD</span> </span><br><span class="line">rd -r ~\AppData\Local\nvim </span><br><span class="line">rd -r ~\AppData\Local\nvim-data </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Window PowerShell</span> </span><br><span class="line">rm -Force ~\AppData\Local\nvim </span><br><span class="line">rm -Force ~\AppData\Local\nvim-data</span><br></pre></td></tr></table></figure>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>新版本的配置文件夹里面没有了custom文件夹</p>
+<h3 id="lsp代码提示配置"><a href="#lsp代码提示配置" class="headerlink" title="lsp代码提示配置"></a>lsp代码提示配置</h3><ol>
+<li>首先进入neovim之后输入<code>:Mason</code>安装好你需要的lsp server  </li>
+<li>进入configs文件夹，手动创建lspconfig.lua文件，并复制以下内容进去<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> configs = <span class="built_in">require</span>(<span class="string">&quot;nvchad.configs.lspconfig&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> on_attach = configs.on_attach</span><br><span class="line"><span class="keyword">local</span> on_init = configs.on_init</span><br><span class="line"><span class="keyword">local</span> capabilities = configs.capabilities</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> lspconfig = <span class="built_in">require</span> <span class="string">&quot;lspconfig&quot;</span></span><br><span class="line"><span class="keyword">local</span> servers = &#123; <span class="string">&quot;html&quot;</span>, <span class="string">&quot;cssls&quot;</span>, <span class="string">&quot;clangd&quot;</span>&#125; <span class="comment">--这里输入你需要开启的服务，比如你要开启python-lsp-server,就在后面追加一个pylsp</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _, lsp <span class="keyword">in</span> <span class="built_in">ipairs</span>(servers) <span class="keyword">do</span></span><br><span class="line">  lspconfig[lsp].setup &#123;</span><br><span class="line">    on_init = on_init,</span><br><span class="line">    on_attach = on_attach,</span><br><span class="line">    capabilities = capabilities,</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- Without the loop, you would have to manually set up each LSP </span></span><br><span class="line"><span class="comment">-- </span></span><br><span class="line"><span class="comment">-- lspconfig.html.setup &#123;</span></span><br><span class="line"><span class="comment">--   on_attach = on_attach,</span></span><br><span class="line"><span class="comment">--   capabilities = capabilities,</span></span><br><span class="line"><span class="comment">-- &#125;</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line"><span class="comment">-- lspconfig.cssls.setup &#123;</span></span><br><span class="line"><span class="comment">--   on_attach = on_attach,</span></span><br><span class="line"><span class="comment">--   capabilities = capabilities,</span></span><br><span class="line"><span class="comment">-- &#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>进入plugins文件夹在init.lua文件中追加以下内容<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;neovim/nvim-lspconfig&quot;</span>,</span><br><span class="line">  <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&quot;nvchad.configs.lspconfig&quot;</span>).defaults()</span><br><span class="line">    <span class="built_in">require</span> <span class="string">&quot;configs.lspconfig&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+至此，lsp配置完毕，已经愉快的使用代码提示了</li>
+</ol>
+<h3 id="配置Jaq代码执行和平滑滚动"><a href="#配置Jaq代码执行和平滑滚动" class="headerlink" title="配置Jaq代码执行和平滑滚动"></a>配置Jaq代码执行和平滑滚动</h3><ol>
+<li>进入plugins文件夹创建pluginList.lua文件(这个文件名可以是任意文件名)，填入以下内容，这里我采用了opts与plugin配置文件分开的写法<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> overrides = <span class="built_in">require</span>(<span class="string">&quot;configs.overrides&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> plugins = &#123;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;is0n/jaq-nvim&quot;</span>,</span><br><span class="line">    opts = overrides.jaqnvim,</span><br><span class="line">    lazy = <span class="literal">false</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;karb94/neoscroll.nvim&quot;</span>,</span><br><span class="line">    <span class="built_in">config</span> = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">      <span class="built_in">require</span>(<span class="string">&#x27;neoscroll&#x27;</span>).setup &#123;&#125;</span><br><span class="line">    <span class="keyword">end</span>,</span><br><span class="line">    lazy = <span class="literal">false</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> plugins</span><br></pre></td></tr></table></figure>
+注意：这里<code>lazy = false</code>是必须的，不然这两个插件不起作用</li>
+<li>进入configs文件夹，创建overrides.lua文件，填入以下内容(这里主要是Jaq的配置，可以参考Jaq官方github也可以直接copy我的配置)<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> M = &#123;&#125;</span><br><span class="line"></span><br><span class="line">M.jaqnvim = &#123;</span><br><span class="line">  cmds = &#123;</span><br><span class="line">    <span class="comment">-- Uses vim commands</span></span><br><span class="line">    internal = &#123;</span><br><span class="line">      lua = <span class="string">&quot;lusfile %&quot;</span>,</span><br><span class="line">      vim = <span class="string">&quot;source %&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">--Uses shell commands</span></span><br><span class="line">    external = &#123;</span><br><span class="line">      markdown = <span class="string">&quot;glow %&quot;</span>,</span><br><span class="line">      python = <span class="string">&quot;python %&quot;</span>,</span><br><span class="line">      sh = <span class="string">&quot;sh %&quot;</span>,</span><br><span class="line">      cpp = <span class="string">&quot;cd $dir &amp;&amp; g++ % -o $fileBase.exe &amp;&amp; $dir/$fileBase.exe &amp;&amp; rm $fileBase.exe&quot;</span>,</span><br><span class="line">      c = <span class="string">&quot;cd $dir &amp;&amp; gcc % -o $fileBase.exe &amp;&amp; $dir/$fileBase.exe &amp;&amp; rm $fileBase.exe&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  bahavior = &#123;</span><br><span class="line">    <span class="comment">--Default type</span></span><br><span class="line">    default = <span class="string">&quot;terminal&quot;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">--Start in insert mode</span></span><br><span class="line">    startinsert = <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">--Use &quot;wincmd p&quot; on  startup</span></span><br><span class="line">    wincmd = <span class="literal">false</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">--Auto-save files</span></span><br><span class="line">    autosave = <span class="literal">false</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  ui = &#123;</span><br><span class="line">    float = &#123;</span><br><span class="line">      border = <span class="string">&quot;none&quot;</span>,</span><br><span class="line">      winhl = <span class="string">&quot;Normal&quot;</span>,</span><br><span class="line">      borderhl = <span class="string">&quot;FloatBorder&quot;</span>,</span><br><span class="line">      winblend = <span class="number">0</span>,</span><br><span class="line">      height = <span class="number">0.8</span>,</span><br><span class="line">      width = <span class="number">0.8</span>,</span><br><span class="line">      x = <span class="number">0.5</span>,</span><br><span class="line">      y = <span class="number">0.5</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    terminal = &#123;</span><br><span class="line">      position = <span class="string">&quot;bot&quot;</span>,</span><br><span class="line">      size = <span class="number">10</span>,</span><br><span class="line">      line_no = <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    quickfix = &#123;</span><br><span class="line">      position = <span class="string">&quot;bot&quot;</span>,</span><br><span class="line">      size = <span class="number">10</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> M</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="配置lr终端快捷执行当前代码文件"><a href="#配置lr终端快捷执行当前代码文件" class="headerlink" title="配置lr终端快捷执行当前代码文件"></a>配置<Space>lr终端快捷执行当前代码文件</h3><p>以<code>python</code>为例：<br>进入到<code>nvchad</code>的配置文件目录，我的是<code>/home/jym/.config/nvim/lua</code>,编辑<code>mappings.lua</code>文件，新增如下代码：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">map(<span class="string">&#x27;n&#x27;</span>, <span class="string">&#x27;&lt;leader&gt;lr&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&#x27;nvchad.term&#x27;</span>).runner&#123;</span><br><span class="line">      id = <span class="string">&quot;boo&quot;</span>,</span><br><span class="line">      pos = <span class="string">&quot;sp&quot;</span>,</span><br><span class="line"></span><br><span class="line">      cmd = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">        <span class="keyword">local</span> file = vim.fn.expand <span class="string">&quot;%&quot;</span></span><br><span class="line">        <span class="keyword">local</span> ft_cmds = &#123;</span><br><span class="line">          python = <span class="string">&quot;python &quot;</span> .. file,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ft_cmds[vim.bo.ft]</span><br><span class="line">      <span class="keyword">end</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">end</span>,  &#123;desc = <span class="string">&quot;Run Current File&quot;</span>&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<p>至此，Jaq,平滑滚动和快捷终端代码执行当前文件都配置完毕，重新进入neovim即可看到效果</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/jjymsworld/2024/07/22/WPF%E5%BC%80%E5%8F%91%E4%B8%AD%E4%BD%BF%E7%94%A8pythonnet%E8%B0%83%E7%94%A8python%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%83%AD%E5%8A%9B%E5%9B%BE/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2024/03/08/tmux%E5%BC%80%E5%90%AFTruecolor/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2024/03/12/%E6%96%B0%E7%89%88NvChad%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97(Jaq%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%92%8C%E5%B9%B3%E6%BB%91%E6%BB%9A%E5%8A%A8%E6%8F%92%E4%BB%B6)/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2024/03/12/新版NvChad安装配置指南(Jaq代码执行和平滑滚动插件)/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>
