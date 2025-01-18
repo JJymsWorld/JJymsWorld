@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Revves_J">
+
+
+
+
+
+
+
+<title>nvchad快捷lr终端执行代码配置 | YiMing</title>
+
+
+
+    <link rel="icon" href="/jjymsworld/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/jjymsworld/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/jjymsworld/js/menu.js"></script>
+    
+
+
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+
+  <!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/jjymsworld/">
+          
+            <img class="logo-img" src="/jjymsworld/logo2.png" alt="logo_image">
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/">Home</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/archives/">Archive</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/categories/gallery/">Gallery</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/jjymsworld/tag/">Tags</a>
+              </li> 
+                   
+          
+          
+            <li class="menu-item search-btn">
+              <a href="#">Search</a>
+            </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/neovim/">
+                            neovim
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/jjymsworld/tags/nvchad/">
+                            nvchad
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                nvchad快捷lr终端执行代码配置
+            
+            
+        </div>
+        <span class="post-date">
+            1月 18, 2025
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>在nvim配置文件目录下的mappings.lua文件里面新增下面代码。</p>
+<p>linux下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">map(<span class="string">&#x27;n&#x27;</span>, <span class="string">&#x27;&lt;leader&gt;lr&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&#x27;nvchad.term&#x27;</span>).runner&#123;</span><br><span class="line">      id = <span class="string">&quot;boo&quot;</span>,</span><br><span class="line">      pos = <span class="string">&quot;sp&quot;</span>,</span><br><span class="line"></span><br><span class="line">      cmd = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">        <span class="keyword">local</span> file = vim.fn.expand <span class="string">&quot;%&quot;</span></span><br><span class="line">        <span class="keyword">local</span> ft_cmds = &#123;</span><br><span class="line">          python = <span class="string">&quot;python &quot;</span> .. file,</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ft_cmds[vim.bo.ft]</span><br><span class="line">      <span class="keyword">end</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">end</span>,  &#123;desc = <span class="string">&quot;Run Current File&quot;</span>&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<p>windows下：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">map(<span class="string">&#x27;n&#x27;</span>, <span class="string">&#x27;&lt;leader&gt;lr&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&#x27;nvchad.term&#x27;</span>).runner&#123;</span><br><span class="line">      id = <span class="string">&#x27;boo&#x27;</span>,</span><br><span class="line">      pos = <span class="string">&#x27;sp&#x27;</span>,</span><br><span class="line">      shell = <span class="string">&quot;pwsh&quot;</span>,</span><br><span class="line"></span><br><span class="line">      cmd = <span class="function"><span class="keyword">function</span> <span class="params">()</span></span></span><br><span class="line">        <span class="keyword">local</span> file = vim.fn.expand <span class="string">&quot;%&quot;</span></span><br><span class="line">        <span class="keyword">local</span> conda_env = vim.fn.<span class="built_in">getenv</span>(<span class="string">&quot;CONDA_DEFAULT_ENV&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> conda_env == <span class="string">&quot;&quot;</span> <span class="keyword">then</span></span><br><span class="line">          conda_env = <span class="string">&quot;base&quot;</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> ft_cmds = &#123;</span><br><span class="line">          python = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">&#x27;conda activate %s; python &quot;%s&quot;&#x27;</span>, conda_env, file),</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">local</span> cc = ft_cmds[vim.bo.ft]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Executing command: &quot;</span> ..cc)</span><br><span class="line">        <span class="keyword">return</span> cc</span><br><span class="line">      <span class="keyword">end</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">end</span>, &#123;desc = <span class="string">&quot;Run Current File&quot;</span>&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>最后保存完当前编辑的文件，使用<leader> + l r即可快速执行当前代码。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/jjymsworld/2024/12/02/%E5%B0%86tmux%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AF%BC%E5%87%BA%E8%87%B3%E6%96%87%E4%BB%B6%E4%B8%AD/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+    
+        <div id="disqus_thread"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            
+            var disqus_config = function () {
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2025/01/18/nvchad%E5%BF%AB%E6%8D%B7lr%E7%BB%88%E7%AB%AF%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81%E9%85%8D%E7%BD%AE/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2025/01/18/nvchad快捷lr终端执行代码配置/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.language = 'en'
+            };
+            
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://versatile1.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>   
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+      <div class="search-popup">
+    <div class="search-popup-overlay">  
+    </div>
+    <div class="search-popup-window" >
+        <div class="search-header">
+            <div class="search-input-container">
+              <input autocomplete="off" autocapitalize="off" maxlength="80"
+                     placeholder="Search Anything" spellcheck="false"
+                     type="search" class="search-input">
+            </div>
+            <div class="search-close-btn">
+                <div class="icon close-btn"></div>
+            </div>
+        </div>
+        <div class="search-result-container">
+        </div>
+    </div>
+</div>
+
+<script>
+    const searchConfig = {
+        path             : "/jjymsworld/search.xml",
+        top_n_per_article: "1",
+        unescape         : "false",
+        trigger: "auto",
+        preload: "false"
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+<script src="js/search.js"></script>
+    
+    
+
+  </body>
+</html>
