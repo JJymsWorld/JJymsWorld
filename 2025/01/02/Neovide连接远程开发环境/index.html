@@ -14,7 +14,7 @@
 
 
 
-<title>将tmux窗口中的内容导出至文件中 | YiMing</title>
+<title>Neovide连接远程开发环境 | YiMing</title>
 
 
 
@@ -127,8 +127,8 @@
             
                 
                     <span class="post-tag">
-                        <a href="/jjymsworld/tags/tmux/">
-                            tmux
+                        <a href="/jjymsworld/tags/neovide/">
+                            neovide
                         </a>
                     </span>    
                            
@@ -137,12 +137,12 @@
         <div class="post-title">
             
             
-                将tmux窗口中的内容导出至文件中
+                Neovide连接远程开发环境
             
             
         </div>
         <span class="post-date">
-            12月 2, 2024
+            1月 2, 2025
         </span>
     </div>
     <div class="post-img">
@@ -152,11 +152,15 @@
     </div>
 </div>
     <div class="post-content">
-    <ol>
-<li>进入指定的tmux会话<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux attach -t xxx</span><br></pre></td></tr></table></figure></li>
-<li>将当前窗口的内容补货到一个缓冲区中<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux capture-pane -S -32768</span><br></pre></td></tr></table></figure></li>
-<li>将缓冲区的内容保存到文件中<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux save-buffer &lt;file_path&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
+    <p>方法比较麻烦，但是neovide的使用体验还是蛮好的，具体方法就是需要打开三个本地终端。<br>在终端1中，通过<code>ssh</code>命令远程连接上服务器，打开一个tmux。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda activate gaitdfu  ##切换到指定的conda环境</span><br><span class="line">cd /mnt/yourpath  ## cd到你想打开的目录</span><br><span class="line"></span><br><span class="line">nvim --headless --listen 127.0.0.1:6210</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>终端2：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -L 6210:127.0.0.1:6210 xd5jym</span><br></pre></td></tr></table></figure>
+
+<p>终端3：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neovide --server 127.0.0.1:6210</span><br></pre></td></tr></table></figure>
+
 
 </div> 
 
@@ -170,7 +174,7 @@
            
                 <div class="icon arrow-left"></div>
                 <div class="post-link">
-                    <a href="/jjymsworld/2025/01/02/Neovide%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">Prev</a>
+                    <a href="/jjymsworld/2025/01/18/nvchad%E5%BF%AB%E6%8D%B7lr%E7%BB%88%E7%AB%AF%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81%E9%85%8D%E7%BD%AE/">Prev</a>
                 </div>
             
         </div>
@@ -178,7 +182,7 @@
             
                 <div class="icon arrow-right"></div>
                 <div class="post-link">
-                  <a href="/jjymsworld/2024/07/22/windows10%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E8%A7%A3%E5%86%B3%E7%AD%BE%E5%90%8D%E9%97%AE%E9%A2%98/">Next</a>  
+                  <a href="/jjymsworld/2024/12/02/%E5%B0%86tmux%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AF%BC%E5%87%BA%E8%87%B3%E6%96%87%E4%BB%B6%E4%B8%AD/">Next</a>  
                 </div>  
             
         </div>
@@ -198,8 +202,8 @@
             *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
             
             var disqus_config = function () {
-                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2024/12/02/%E5%B0%86tmux%E7%AA%97%E5%8F%A3%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9%E5%AF%BC%E5%87%BA%E8%87%B3%E6%96%87%E4%BB%B6%E4%B8%AD/';  // Replace PAGE_URL with your page's canonical URL variable
-                this.page.identifier = '2024/12/02/将tmux窗口中的内容导出至文件中/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                this.page.url = 'https://jjymsworld.github.io/jjymsworld/2025/01/02/Neovide%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/';  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = '2025/01/02/Neovide连接远程开发环境/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
                 this.language = 'en'
             };
             
